@@ -36,10 +36,9 @@ public class LoginController {
     }
 
     @PostMapping("/user/register")
-    public String register(@RequestBody UserNameAndPWD userNameAndPWD){
+    public String register(@RequestBody User user){
 
-        User user = userService.insertUser(userNameAndPWD);
-        if (user != null){
+        if (userService.register(user)){
             return JwtUtil.createJwt(user,10000);
         }
 

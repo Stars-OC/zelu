@@ -35,7 +35,7 @@ public class JwtUtil {
         long expire = now + validTime * 3600000L;
 
         return Jwts.builder()
-                .setIssuer("Cloud OJ")
+                .setIssuer("zelu")
                 .setIssuedAt(new Date(now))
                 .setExpiration(new Date(expire))
                 .claim("uid", user.getUid())
