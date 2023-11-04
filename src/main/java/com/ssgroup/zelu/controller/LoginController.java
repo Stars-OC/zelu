@@ -41,6 +41,7 @@ public class LoginController {
             }
         }catch (NullPointerException e){
             log.warn(e.getMessage());
+            return Result.failure("该用户尚未注册");
         }
 
         // 密码不匹配或用户不存在，返回"账号密码错误"
@@ -58,7 +59,7 @@ public class LoginController {
         User user = userService.loginWechat(code);
         // 如果用户为空，返回登录失败结果
         if (user == null){
-            return Result.failure("登录失败");
+            return Result.failure("登录失败 请重试");
         }
         // 利用用户信息生成JWT token，设置过期时间为10000秒
         String jwt = JwtUtil.createJwt(user, verifyTime);
@@ -78,7 +79,7 @@ public class LoginController {
 //        return Result.failure("账号已被注册");
 //    }
 
-    @GetMapping("/user/verify")
+    @GetMapping("/verify")
     public Result<String> verify(){
         return Result.success("验证成功");
     }
