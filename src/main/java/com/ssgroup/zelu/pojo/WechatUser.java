@@ -4,12 +4,8 @@ import lombok.Data;
 
 @Data
 public class WechatUser {
-    private String userid;
-    private String nickname;
-    private String avatar;
+    private long username;
+    private String openid;
     private String unionID;
-    private String sex;
-    private String phonenumber;
-    private long createtime;
-    private long lastlogintime;
+    private String session_key;
 }

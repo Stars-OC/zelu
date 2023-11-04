@@ -6,12 +6,11 @@ import lombok.Data;
 @Data
 @TableName("user")
 public class User {
-    private long uid;
-    private String username;
+    private long username;
     private String nickname;
     private String password;
     private int hasAvatar;
     private int role;
-    private int loginWay;
-    private long createAt = System.currentTimeMillis();
+    private int registerWay;
+    private long createAt = System.currentTimeMillis() / 1000;
 }

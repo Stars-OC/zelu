@@ -85,9 +85,11 @@ public class LoginFilter implements Filter {
             // 如果抛出异常类型为"signature"，则将错误信息设置为"签名不匹配"
             } else if (error.contains("signature")) {
                 error = "签名不匹配";
+            } else {
+                error = "Token无效";
             }
 
-            result = mapper.writeValueAsString(Result.failure(error));
+            result = mapper.writeValueAsString(Result.failure(403,error));
             // 返回错误信息
             response.getWriter().write(result);
         }

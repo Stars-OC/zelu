@@ -10,9 +10,8 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface UserMapper extends BaseMapper<User> {
 
-    User findById(Integer uid);
 
     /** 用来通过@username来获取user对象    */
-    @Select("select uid,username,nickname,password,has_avatar,role,login_way from user where username = #{username} and deleted = false;")
-    User findByUsername(@Param("username") String username);
+    @Select("select username,nickname,password,has_avatar,role,register_way from user where username = #{username} and deleted = false;")
+    User findByUsername(@Param("username") Long username);
 }

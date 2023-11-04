@@ -42,7 +42,7 @@ public class Result<T> implements Serializable {
      * 成 功 操 作 , 携 带 数 据
      */
     public static <T> Result<T> success(T data){
-        return success(ResultCode.RC100.getMessage(),data);
+        return success(ResultCode.RC200.getMessage(),data);
     }
 
     /**
@@ -56,7 +56,7 @@ public class Result<T> implements Serializable {
      * 成 功 操 作, 携 带 消 息 和 携 带 数 据
      */
     public static <T> Result<T> success(String message, T data) {
-        return success(ResultCode.RC100.getCode(), message, data);
+        return success(ResultCode.RC200.getCode(), message, data);
     }
 
     /**
@@ -79,7 +79,7 @@ public class Result<T> implements Serializable {
      * 失 败 操 作, 默 认 数 据
      */
     public static <T> Result<T> failure() {
-        return failure(ResultCode.RC100.getMessage());
+        return failure(ResultCode.RC200.getMessage());
     }
 
     /**
@@ -119,7 +119,7 @@ public class Result<T> implements Serializable {
      * Boolean 返 回 操 作, 携 带 默 认 返 回 值
      */
     public static <T> Result<T> decide(boolean b) {
-        return decide(b, ResultCode.RC100.getMessage(), ResultCode.RC999.getMessage());
+        return decide(b, ResultCode.RC200.getMessage(), ResultCode.RC999.getMessage());
     }
 
     /**

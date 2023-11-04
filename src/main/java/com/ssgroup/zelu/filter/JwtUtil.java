@@ -38,11 +38,11 @@ public class JwtUtil {
                 .setIssuer("zelu")
                 .setIssuedAt(new Date(now))
                 .setExpiration(new Date(expire))
-                .claim("uid", user.getUid())
                 .claim("username", user.getUsername())
                 .claim("nickname", user.getNickname())
                 .claim("hasAvatar", user.getHasAvatar())
                 .claim("role", user.getRole())
+                .claim("registerWay",user.getRegisterWay())
 //                .claim("authorities", authorities)
                 .signWith(stringToSecretKey(SECRET))
                 .compact();
@@ -63,12 +63,12 @@ public class JwtUtil {
     }
 
     /**
-     * 从 JWT 中取出 uid
+     * 从 JWT 中取出 username
      * <p>此操作不验证 JWT 签名</p>
      *
      * @return uid or null
      */
-    public static Integer getUid(String jwt) {
+    public static Long getUsername(String jwt) {
         // JWT 是 Base64Url 编码
         String base64 = jwt.substring(jwt.indexOf('.') + 1, jwt.lastIndexOf('.'))
                 .replaceAll("-", "+")
@@ -78,7 +78,7 @@ public class JwtUtil {
 
         try {
             JsonNode node = mapper.readTree(payload);
-            return node.get("uid").intValue();
+            return node.get("username").longValue();
         } catch (JacksonException e) {
             log.error("Cannot read uid from token");
             return null;

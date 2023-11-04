@@ -17,6 +17,8 @@ mybatis-plus:
   mapper-locations: classpath:mappers/*.xml
 
 wechat:
-  appID: wxff4fb581fcb8c221
+  appID: wx3a8d6ce93105adfa
+  appSecret: 123
 
 user:
+  verifyTime: 10000
