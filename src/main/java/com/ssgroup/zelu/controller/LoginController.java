@@ -81,6 +81,6 @@ public class LoginController {
 
     @GetMapping("/verify")
     public Result<String> verify(){
-        return Result.success("验证成功");
+        return Result.success("Token验证成功");
     }
 }

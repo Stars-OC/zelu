@@ -132,4 +132,28 @@ public class Result<T> implements Serializable {
             return failure(failure);
         }
     }
+
+    /**
+     * 生成一个带有结果码的Result对象
+     *
+     * @param b     是否成功
+     * @param resultCode  结果码
+     * @param <T>   结果对象类型
+     * @return 生成的Result对象
+     */
+    public static <T> Result<T> resultCode(boolean b, ResultCode resultCode) {
+        Result<T> result = new Result<T>();
+        result.setCode(resultCode.getCode());
+        result.setMsg(resultCode.getMessage());
+        result.setSuccess(b);
+        return result;
+    }
+
+    public static <T> Result<T> codeSuccess( ResultCode resultCode) {
+        return resultCode(true, resultCode);
+    }
+
+    public static <T> Result<T> codeFailure( ResultCode resultCode) {
+        return resultCode(false, resultCode);
+    }
 }

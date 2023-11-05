@@ -2,20 +2,16 @@ package com.ssgroup.zelu.filter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ssgroup.zelu.pojo.Result;
+import com.ssgroup.zelu.pojo.ResultCode;
 import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Header;
-import io.jsonwebtoken.Jwt;
 import io.jsonwebtoken.JwtException;
 import jakarta.servlet.*;
 import jakarta.servlet.annotation.WebFilter;
-import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.boot.autoconfigure.security.SecurityProperties;
 
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 
 @Slf4j
 @WebFilter(urlPatterns = "/*")
@@ -54,7 +50,7 @@ public class LoginFilter implements Filter {
         String result = "";
         // 如果token为空，则返回"token不存在，请登录"
         if (token == null) {
-            result = mapper.writeValueAsString(Result.failure("token不存在，请登录"));
+            result = mapper.writeValueAsString(Result.codeFailure(ResultCode.TOKEN_INVALID));
             response.getWriter().write(result);
             return;
         }
@@ -64,7 +60,7 @@ public class LoginFilter implements Filter {
             Claims claims = JwtUtil.getClaims(token);
             // 如果claims信息为空，则返回"token不存在，请登录"
             if (claims == null) {
-                result = mapper.writeValueAsString(Result.failure("token不存在，请登录"));
+                result = mapper.writeValueAsString(Result.codeFailure(ResultCode.TOKEN_INVALID));
                 response.getWriter().write(result);
                 return;
             }
@@ -73,23 +69,24 @@ public class LoginFilter implements Filter {
             chain.doFilter(servletRequest, servletResponse);
 
         } catch (JwtException | IllegalArgumentException | StringIndexOutOfBoundsException e) {
-            String error = e.getMessage();
-            log.error("Verify token failed: {}", error);
+            String errorMsg = e.getMessage();
+            ResultCode resultCode;
+            log.error("Verify token failed: {}", errorMsg);
 
             // 如果抛出异常类型为StringIndexOutOfBoundsException，则将错误信息设置为"Token错误"
             if (e instanceof StringIndexOutOfBoundsException) {
-                error = "Token错误";
+                resultCode = ResultCode.TOKEN_INVALID;
             // 如果抛出异常类型为"expired"，则将错误信息设置为"Token已过期"
-            } else if (error.contains("expired")) {
-                error = "Token已过期";
+            } else if (errorMsg.contains("expired")) {
+                resultCode = ResultCode.TOKEN_EXPIRED;
             // 如果抛出异常类型为"signature"，则将错误信息设置为"签名不匹配"
-            } else if (error.contains("signature")) {
-                error = "签名不匹配";
+            } else if (errorMsg.contains("signature")) {
+                resultCode = ResultCode.INVALID_TOKEN;
             } else {
-                error = "Token无效";
+                resultCode = ResultCode.ACCESS_DENIED;
             }
 
-            result = mapper.writeValueAsString(Result.failure(403,error));
+            result = mapper.writeValueAsString(Result.codeFailure(resultCode));
             // 返回错误信息
             response.getWriter().write(result);
         }
