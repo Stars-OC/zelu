@@ -2,9 +2,6 @@ package com.ssgroup.zelu.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.ssgroup.zelu.pojo.User;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Select;
 import org.springframework.stereotype.Repository;
 
 @Repository

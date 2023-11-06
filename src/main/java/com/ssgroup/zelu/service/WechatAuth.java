@@ -46,12 +46,16 @@ public class WechatAuth {
      */
     public WechatUser getWechatUser(String code){
         try {
-            String accessToken = getAccessToken(code); // 获取access_token
-            return objectMapper.readValue(accessToken, WechatUser.class); // 将access_token解析为WechatUser对象
+            // 获取access_token
+            String accessToken = getAccessToken(code);
+            // 将access_token解析为WechatUser对象
+            return objectMapper.readValue(accessToken, WechatUser.class);
         } catch (IOException e) {
-            log.warn("token获取失败 {}",code); // 捕获IO异常并记录日志
+            // 捕获IO异常并记录日志
+            log.warn("token获取失败 {}",code);
         }
-        return null; // 返回null表示获取微信用户信息失败
+        // 返回null表示获取微信用户信息失败
+        return null;
     }
 
 

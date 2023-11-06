@@ -123,7 +123,13 @@ public class Result<T> implements Serializable {
     }
 
     /**
-     * Boolean 返 回 操 作, 携 带 自 定 义 消 息
+     * 根据给定的条件决定返回成功结果还是失败结果
+     *
+     * @param b           条件
+     * @param success     成功结果的字符串
+     * @param failure     失败结果的字符串
+     * @param <T>         结果类型
+     * @return            如果条件为真，返回一个成功结果，否则返回一个失败结果
      */
     public static <T> Result<T> decide(boolean b, String success, String failure) {
         if (b) {
@@ -132,6 +138,7 @@ public class Result<T> implements Serializable {
             return failure(failure);
         }
     }
+
 
     /**
      * 生成一个带有结果码的Result对象
@@ -149,11 +156,27 @@ public class Result<T> implements Serializable {
         return result;
     }
 
-    public static <T> Result<T> codeSuccess( ResultCode resultCode) {
+    /**
+     * 将给定的ResultCode封装为一个成功的Result对象。
+     *
+     * @param resultCode 传入的ResultCode对象
+     * @param <T>       泛型类型
+     * @return 包含给定ResultCode对象的Result对象
+     */
+    public static <T> Result<T> codeSuccess(ResultCode resultCode) {
         return resultCode(true, resultCode);
     }
 
-    public static <T> Result<T> codeFailure( ResultCode resultCode) {
+
+        /**
+     * 根据给定的错误码返回一个失败的结果对象。
+     *
+     * @param resultCode 错误码
+     * @param <T> 结果对象的数据类型
+     * @return 失败的结果对象
+     */
+    public static <T> Result<T> codeFailure(ResultCode resultCode) {
         return resultCode(false, resultCode);
     }
+
 }

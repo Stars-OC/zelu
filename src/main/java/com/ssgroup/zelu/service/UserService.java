@@ -3,7 +3,6 @@ package com.ssgroup.zelu.service;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.ssgroup.zelu.mapper.UserMapper;
 import com.ssgroup.zelu.mapper.WechatUserMapper;
-import com.ssgroup.zelu.pojo.Result;
 import com.ssgroup.zelu.pojo.User;
 import com.ssgroup.zelu.pojo.WechatUser;
 import jakarta.annotation.Resource;

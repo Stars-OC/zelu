@@ -9,9 +9,6 @@ import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
@@ -30,28 +27,38 @@ public class JwtUtil {
         return new SecretKeySpec(secret.getBytes(), SignatureAlgorithm.HS256.getJcaName());
     }
 
+    /**
+     * 创建JWTToken
+     * @param user 用户信息
+     * @param validTime 有效时间
+     * @return JWTToken字符串
+     */
     public static String createJwt(User user, Integer validTime) {
         long now = System.currentTimeMillis();
         long expire = now + validTime * 3600000L;
 
         return Jwts.builder()
-                .setIssuer("zelu")
-                .setIssuedAt(new Date(now))
-                .setExpiration(new Date(expire))
-                .claim("username", user.getUsername())
-                .claim("nickname", user.getNickname())
-                .claim("hasAvatar", user.getHasAvatar())
-                .claim("role", user.getRole())
-                .claim("registerWay",user.getRegisterWay())
-//                .claim("authorities", authorities)
-                .signWith(stringToSecretKey(SECRET))
-                .compact();
+                .setIssuer("zelu") // 设置签发者
+                .setIssuedAt(new Date(now)) // 设置签发时间
+                .setExpiration(new Date(expire)) // 设置过期时间
+                .claim("username", user.getUsername()) // 添加用户名声明
+                .claim("nickname", user.getNickname()) // 添加昵称声明
+                .claim("hasAvatar", user.getHasAvatar()) // 添加是否有头像声明
+                .claim("role", user.getRole()) // 添加角色声明
+                .claim("registerWay",user.getRegisterWay()) // 添加注册方式声明
+//                .claim("authorities", authorities) // 添加权限声明，该部分代码缺失
+                .signWith(stringToSecretKey(SECRET)) // 使用SECRET作为签名密钥
+                .compact(); // 缩小JWTToken长度
     }
+
 
     /**
      * 验证并返回 JWT Body
      *
-     * @return {@link Claims}
+     * @param jwt 要验证的JWT
+     * @return 解析出的Claims对象
+     * @throws JwtException 如果解析过程中发生错误
+     * @throws IllegalArgumentException 如果JWT无效
      */
     public static Claims getClaims(String jwt)
             throws JwtException, IllegalArgumentException {
@@ -61,6 +68,7 @@ public class JwtUtil {
                 .parseClaimsJws(jwt)
                 .getBody();
     }
+
 
     /**
      * 从 JWT 中取出 username
@@ -80,7 +88,7 @@ public class JwtUtil {
             JsonNode node = mapper.readTree(payload);
             return node.get("username").longValue();
         } catch (JacksonException e) {
-            log.error("Cannot read uid from token");
+            log.error("获取username失败从 token: {}",jwt);
             return null;
         }
     }

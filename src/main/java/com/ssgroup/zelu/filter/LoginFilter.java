@@ -18,7 +18,7 @@ import java.io.IOException;
 public class LoginFilter implements Filter {
 
     private final static ObjectMapper mapper = new ObjectMapper();
-        /**
+    /**
      * 过滤器方法，用于处理请求和响应
      *
      * @param servletRequest  Servlet请求对象
@@ -71,7 +71,7 @@ public class LoginFilter implements Filter {
         } catch (JwtException | IllegalArgumentException | StringIndexOutOfBoundsException e) {
             String errorMsg = e.getMessage();
             ResultCode resultCode;
-            log.error("Verify token failed: {}", errorMsg);
+            log.error("Token验证失败 : {}", errorMsg);
 
             // 如果抛出异常类型为StringIndexOutOfBoundsException，则将错误信息设置为"Token错误"
             if (e instanceof StringIndexOutOfBoundsException) {
