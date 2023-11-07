@@ -5,6 +5,7 @@ import com.ssgroup.zelu.mapper.UserMapper;
 import com.ssgroup.zelu.mapper.WechatUserMapper;
 import com.ssgroup.zelu.pojo.User;
 import com.ssgroup.zelu.pojo.WechatUser;
+import com.ssgroup.zelu.utils.AesUtil;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -84,8 +85,12 @@ public class UserService {
         User user = getNewUser(wechatUserAuth);
 
         // 将用户信息插入数据库
-        userMapper.insert(user);
         wechatUserMapper.insert(wechatUserAuth);
+        WechatUser newWechatUser = findOpenid(wechatUser.getOpenid());
+        user.setUsername(newWechatUser.getUsername());
+
+        userMapper.insert(user);
+
         return user;
     }
 
@@ -109,18 +114,23 @@ public class UserService {
     }
 
 
-//    public boolean register(User user){
-//        if (user == null){
-//            return false;
-//        }
-//
-//        if (findUsername(user.getUsername()) != null){
-//            return false;
-//        }
-//
-//        return userMapper.insert(user) > 0;
-//    }
-//    public String login(){
-//
-//    }
+    /**
+     * 注册用户
+     * @param user 要注册的用户对象
+     * @return 注册是否成功
+     */
+    public boolean register(User user){
+        if (user == null){
+            return false;
+        }
+
+        if (findUsername(user.getUsername()) != null){
+            return false;
+        }
+        user.setPassword(AesUtil.encrypt(user.getPassword()));
+        user.setRegisterWay(1);
+        user.setRole(0);
+        return userMapper.insert(user) > 0;
+    }
+
 }

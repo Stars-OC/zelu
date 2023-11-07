@@ -15,9 +15,9 @@ import java.util.concurrent.TimeUnit;
 @Slf4j
 public class WechatAuth {
 
-    private OkHttpClient client = new OkHttpClient.Builder().connectTimeout(1, TimeUnit.SECONDS).build();
+    private final OkHttpClient client = new OkHttpClient.Builder().connectTimeout(1, TimeUnit.SECONDS).build();
 
-    private ObjectMapper objectMapper = new ObjectMapper();
+    private final ObjectMapper objectMapper = new ObjectMapper();
 
     @Value("${wechat.appID}")
     private String appID;
@@ -36,6 +36,7 @@ public class WechatAuth {
         String url = "https://api.weixin.qq.com/sns/jscode2session?&appid=" + appID + "&secret=" + appSecret + "&js_code=" + code + "&grant_type=authorization_code";
         Request request = new Request.Builder().url(url).build();
         String result = client.newCall(request).execute().body().string();
+        log.info("获取access_token {}",result);
         return result;
     }
 

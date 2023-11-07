@@ -5,6 +5,7 @@ import com.ssgroup.zelu.pojo.Result;
 import com.ssgroup.zelu.pojo.User;
 import com.ssgroup.zelu.pojo.UsernameAndPWD;
 import com.ssgroup.zelu.service.UserService;
+import com.ssgroup.zelu.utils.AesUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -34,14 +35,14 @@ public class LoginController {
 
         try {
             // 判断密码是否匹配
-            if (usernameAndPWD.getPassword().equals(user.getPassword())){
+            String password = AesUtil.encrypt(usernameAndPWD.getPassword());
+            if (password.equals(user.getPassword())){
                 // 登录成功，返回JWT
                 String jwt = JwtUtil.createJwt(user, verifyTime);
                 return Result.success("登录成功",jwt);
             }
         }catch (NullPointerException e){
             log.warn(e.getMessage());
-            return Result.failure("该用户尚未注册");
         }
 
         // 密码不匹配或用户不存在，返回"账号密码错误"
@@ -64,23 +65,36 @@ public class LoginController {
         // 利用用户信息生成JWT token，设置过期时间为10000秒
         String jwt = JwtUtil.createJwt(user, verifyTime);
         // 返回登录成功结果，包含JWT token
-        return Result.success(jwt);
+        return Result.success("授权成功",jwt);
     }
 
 
-//    @PostMapping("/user/register")
-//    public Result<String> register(@RequestBody User user){
-//
-//        if (userService.register(user)){
-//            String jwt = JwtUtil.createJwt(user, 10000);
-//            return Result.success(jwt);
-//        }
-//
-//        return Result.failure("账号已被注册");
-//    }
+    /**
+     * 用户注册
+     * POST /user/register
+     *
+     * @param user 用户信息
+     * @return 注册结果
+     */
+    @PostMapping("/user/register")
+    public Result<String> register(@RequestBody User user){
 
+        if (userService.register(user)){
+            String jwt = JwtUtil.createJwt(user, 10000);
+            return Result.success("账户注册成功",jwt);
+        }
+
+        return Result.failure("账号已被注册");
+    }
+
+
+    /**
+     * 验证Token
+     * @return 验证结果
+     */
     @GetMapping("/verify")
     public Result<String> verify(){
-        return Result.success("Token验证成功");
+        return Result.success("token验证成功");
     }
+
 }

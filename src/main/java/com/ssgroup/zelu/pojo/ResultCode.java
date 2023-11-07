@@ -27,12 +27,32 @@ public enum ResultCode {
     /**服务异常**/
     RC500(500,"系统异常，请稍后重试"),
 
-    TOKEN_EXPIRED(2001,"访问Token已过期"),
-    TOKEN_INVALID(2002,"访问Token无效"),
-    INVALID_TOKEN(2003,"访问Token不合法"),
+
+    /**
+     * 访问token已过期
+     */
+    TOKEN_EXPIRED(2001,"访问token已过期"),
+    /**
+     * 访问token无效
+     */
+    TOKEN_INVALID(2002,"访问token无效"),
+    /**
+     * 访问token不合法
+     */
+    INVALID_TOKEN(2003,"访问token不合法"),
+    /**
+     * 没有权限访问该资源
+     */
     ACCESS_DENIED(2004,"没有权限访问该资源"),
+    /**
+     * 客户端认证失败
+     */
     CLIENT_AUTHENTICATION_FAILED(1001,"客户端认证失败"),
+    /**
+     * 用户名或密码错误
+     */
     USERNAME_OR_PASSWORD_ERROR(1002,"用户名或密码错误"),
+
     UNSUPPORTED_GRANT_TYPE(1003, "不支持的认证模式");
 
     /**自定义状态码**/
