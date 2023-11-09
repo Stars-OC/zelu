@@ -50,6 +50,10 @@ public class WechatAuth {
             // 获取access_token
             String accessToken = getAccessToken(code);
             // 将access_token解析为WechatUser对象
+//            WechatUser wechatUser = new WechatUser();
+//            wechatUser.setOpenid("12347979456");
+//            wechatUser.setUnionid("45687898889");
+//            return wechatUser;
             return objectMapper.readValue(accessToken, WechatUser.class);
         } catch (IOException e) {
             // 捕获IO异常并记录日志

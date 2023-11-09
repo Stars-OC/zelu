@@ -86,7 +86,7 @@ public class UserService {
 
         // 将用户信息插入数据库
         wechatUserMapper.insert(wechatUserAuth);
-        WechatUser newWechatUser = findOpenid(wechatUser.getOpenid());
+        WechatUser newWechatUser = findOpenid(wechatUserAuth.getOpenid());
         user.setUsername(newWechatUser.getUsername());
 
         userMapper.insert(user);
