@@ -51,12 +51,13 @@ public class WechatAuth {
             String accessToken = getAccessToken(code);
             // 将access_token解析为WechatUser对象
 //            WechatUser wechatUser = new WechatUser();
-//            wechatUser.setOpenid("12347979456");
-//            wechatUser.setUnionid("45687898889");
+//            wechatUser.setOpenid("123479s79456");
+//            wechatUser.setUnionid("456878s98889");
 //            return wechatUser;
             return objectMapper.readValue(accessToken, WechatUser.class);
         } catch (IOException e) {
             // 捕获IO异常并记录日志
+            e.printStackTrace();
             log.warn("token获取失败 {}",code);
         }
         // 返回null表示获取微信用户信息失败

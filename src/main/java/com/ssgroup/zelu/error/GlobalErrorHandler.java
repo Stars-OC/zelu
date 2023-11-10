@@ -11,6 +11,7 @@ public class GlobalErrorHandler {
 
     @ExceptionHandler(Exception.class)
     public String otherErrorHandler(Exception e) {
+        log.error(e.getMessage());
         return "error : [ " + e.getMessage() + "]";
     }
 

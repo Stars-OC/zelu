@@ -19,7 +19,7 @@ create table wechat_user
     username    bigint auto_increment
         primary key,
     openid      varchar(60) not null,
-    unionid     varchar(50) not null,
+    unionid     varchar(50) ,
     constraint idx_username
         unique (username),
     constraint openid

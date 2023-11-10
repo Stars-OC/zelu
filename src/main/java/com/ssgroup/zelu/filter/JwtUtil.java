@@ -46,7 +46,6 @@ public class JwtUtil {
                 .claim("hasAvatar", user.getHasAvatar()) // 添加是否有头像声明
                 .claim("role", user.getRole()) // 添加角色声明
                 .claim("registerWay",user.getRegisterWay()) // 添加注册方式声明
-//                .claim("authorities", authorities) // 添加权限声明，该部分代码缺失
                 .signWith(stringToSecretKey(SECRET)) // 使用SECRET作为签名密钥
                 .compact(); // 缩小JWTToken长度
     }

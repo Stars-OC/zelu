@@ -97,4 +97,28 @@ public class LoginController {
         return Result.success("token验证成功");
     }
 
+//    @GetMapping("/user/logout")
+//    public Result<String> logout(){
+//        return Result.success("退出成功");
+//    }
+
+    /**
+     * 刷新token
+     * @param token 要刷新的token
+     * @return 刷新结果
+     */
+    @GetMapping("/refresh_token")
+    public Result<String> refreshToken(@RequestParam String token){
+        // 获取username
+        Long username = JwtUtil.getUsername(token);
+        if (username == null){
+            return Result.failure("token验证失败");
+        }
+        // 根据username查询用户信息
+        User user = userService.findUsername(username);
+        // 创建新的token
+        String newToken = JwtUtil.createJwt(user, verifyTime);
+        return Result.success("刷新token成功",newToken);
+    }
+
 }

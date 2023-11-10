@@ -71,7 +71,7 @@ public class LoginFilter implements Filter {
         } catch (JwtException | IllegalArgumentException | StringIndexOutOfBoundsException e) {
             String errorMsg = e.getMessage();
             ResultCode resultCode;
-            log.error("Token验证失败 : {}", errorMsg);
+            log.warn("Token验证失败 : {}", errorMsg);
 
             // 如果抛出异常类型为StringIndexOutOfBoundsException，则将错误信息设置为"Token错误"
             if (e instanceof StringIndexOutOfBoundsException) {

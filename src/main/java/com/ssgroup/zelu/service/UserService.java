@@ -3,6 +3,7 @@ package com.ssgroup.zelu.service;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.ssgroup.zelu.mapper.UserMapper;
 import com.ssgroup.zelu.mapper.WechatUserMapper;
+import com.ssgroup.zelu.pojo.LoginWay;
 import com.ssgroup.zelu.pojo.User;
 import com.ssgroup.zelu.pojo.WechatUser;
 import com.ssgroup.zelu.utils.AesUtil;
@@ -86,8 +87,12 @@ public class UserService {
 
         // 将用户信息插入数据库
         wechatUserMapper.insert(wechatUserAuth);
-        WechatUser newWechatUser = findOpenid(wechatUserAuth.getOpenid());
-        user.setUsername(newWechatUser.getUsername());
+        //两种方法
+//        WechatUser newWechatUser = findOpenid(wechatUserAuth.getOpenid());
+//        user.setUsername(newWechatUser.getUsername());
+        Long username = wechatUserMapper.findUsernameByOpenId(wechatUserAuth.getOpenid());
+        user.setUsername(username);
+
 
         userMapper.insert(user);
 
@@ -105,10 +110,11 @@ public class UserService {
      */
     public User getNewUser(WechatUser wechatUser){
         User user = new User();
-        String nickname = "微信用户" + wechatUser.getOpenid().substring(0, 6);
+        String openid = wechatUser.getOpenid();
+        String nickname = "微信用户" + openid.substring(0, 6);
         user.setNickname(nickname);
-        user.setRegisterWay(2);
-        String password = UUID.randomUUID().toString().replace("-","").substring(0,8);
+        user.setRegisterWay(LoginWay.WECHAT_LOGIN.getCode());
+        String password = openid.substring(0,8);
         user.setPassword(password);
         return user;
     }
@@ -128,9 +134,8 @@ public class UserService {
             return false;
         }
         user.setPassword(AesUtil.encrypt(user.getPassword()));
-        user.setRegisterWay(1);
+        user.setRegisterWay(LoginWay.NORMAL_LOGIN.getCode());
         user.setRole(0);
         return userMapper.insert(user) > 0;
     }
-
 }
