@@ -1,5 +1,6 @@
 package com.ssgroup.zelu.pojo;
 
+import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
@@ -11,7 +12,8 @@ import java.beans.Transient;
 @Data
 @TableName("wechat_user")
 public class WechatUser {
-    private long username;
+    @TableId(type = IdType.AUTO)
+    private Long username;
     private String openid;
     private String unionid;
     @TableField(exist = false)

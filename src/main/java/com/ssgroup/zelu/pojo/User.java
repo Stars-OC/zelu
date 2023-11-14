@@ -1,5 +1,6 @@
 package com.ssgroup.zelu.pojo;
 
+import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
@@ -7,7 +8,8 @@ import lombok.Data;
 @Data
 @TableName("user")
 public class User {
-    private long username;
+    @TableId(type = IdType.AUTO)
+    private Long username;
     private String nickname;
     private String password;
     private int hasAvatar;

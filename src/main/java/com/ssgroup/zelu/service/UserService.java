@@ -85,12 +85,11 @@ public class UserService {
         // 创建新的用户对象
         User user = getNewUser(wechatUserAuth);
 
-        // 将用户信息插入数据库
+        // 将用户微信登录信息插入数据库
         wechatUserMapper.insert(wechatUserAuth);
-        //两种方法
-//        WechatUser newWechatUser = findOpenid(wechatUserAuth.getOpenid());
-//        user.setUsername(newWechatUser.getUsername());
-        Long username = wechatUserMapper.findUsernameByOpenId(wechatUserAuth.getOpenid());
+
+        // 将用户信息插入数据库
+        Long username = wechatUserAuth.getUsername();
         user.setUsername(username);
 
 

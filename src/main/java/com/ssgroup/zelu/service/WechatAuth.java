@@ -50,11 +50,11 @@ public class WechatAuth {
             // 获取access_token
             String accessToken = getAccessToken(code);
             // 将access_token解析为WechatUser对象
-//            WechatUser wechatUser = new WechatUser();
-//            wechatUser.setOpenid("123479s79456");
-//            wechatUser.setUnionid("456878s98889");
-//            return wechatUser;
-            return objectMapper.readValue(accessToken, WechatUser.class);
+            WechatUser wechatUser = new WechatUser();
+            wechatUser.setOpenid("123479s7945s456");
+            wechatUser.setUnionid("456a878s988s89");
+            return wechatUser;
+//            return objectMapper.readValue(accessToken, WechatUser.class);
         } catch (IOException e) {
             // 捕获IO异常并记录日志
             e.printStackTrace();
