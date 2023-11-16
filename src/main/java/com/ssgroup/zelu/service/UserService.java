@@ -12,8 +12,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.UUID;
-
 @Service
 @Slf4j
 public class UserService {
@@ -79,23 +77,24 @@ public class UserService {
         if (wechatUserAuth == null) return null;
 
         // 根据openid查询已存在的微信用户
-        WechatUser wechatUser = findOpenid(wechatUserAuth.getOpenid());
-        if (wechatUser != null) return (User) isExists("user","username", wechatUser.getUsername());
+        User user = wechatUserMapper.getByOpenid(wechatUserAuth.getOpenid());
+//        WechatUser wechatUser = findOpenid(wechatUserAuth.getOpenid());
+        if (user != null) return user;
 
         // 创建新的用户对象
-        User user = getNewUser(wechatUserAuth);
+        User newUser = getNewUser(wechatUserAuth);
 
         // 将用户微信登录信息插入数据库
         wechatUserMapper.insert(wechatUserAuth);
 
         // 将用户信息插入数据库
         Long username = wechatUserAuth.getUsername();
-        user.setUsername(username);
+        newUser.setUsername(username);
 
 
-        userMapper.insert(user);
+        userMapper.insert(newUser);
 
-        return user;
+        return newUser;
     }
 
 
