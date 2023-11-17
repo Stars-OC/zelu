@@ -11,6 +11,9 @@ import javax.crypto.spec.SecretKeySpec;
 import java.security.SecureRandom;
 import java.util.Base64;
 
+/**
+ * 用于进行AES加密操作
+ */
 public class AesUtil {
 
     private static final String ALGORITHM = "AES";

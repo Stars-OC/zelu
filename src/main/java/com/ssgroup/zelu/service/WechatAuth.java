@@ -57,7 +57,7 @@ public class WechatAuth {
             return objectMapper.readValue(accessToken, WechatUser.class);
         } catch (IOException e) {
             // 捕获IO异常并记录日志
-            e.printStackTrace();
+            //log.error(e.getMessage(),e);
             log.warn("token获取失败 {}",code);
         }
         // 返回null表示获取微信用户信息失败

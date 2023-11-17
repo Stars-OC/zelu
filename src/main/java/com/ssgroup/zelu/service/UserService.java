@@ -114,6 +114,8 @@ public class UserService {
         user.setRegisterWay(LoginWay.WECHAT_LOGIN.getCode());
         String password = openid.substring(0,8);
         user.setPassword(password);
+        // 注册时间
+        user.setCreateAt(System.currentTimeMillis()/1000);
         return user;
     }
 
