@@ -22,7 +22,7 @@ public class User {
      */
     private long createAt;
 
-    public User(Long username, String nickname, String password, int hasAvatar, int role, int registerWay, long createAt) {
+    public User(Long username, String nickname, String password, int hasAvatar, int role, int registerWay) {
         this.username = username;
         this.nickname = nickname;
         this.password = password;
@@ -30,5 +30,15 @@ public class User {
         this.role = role;
         this.registerWay = registerWay;
         this.createAt = System.currentTimeMillis() / 1000;
+    }
+
+    public User(Long username, String nickname, String password, int hasAvatar, int role, int registerWay, long createAt) {
+        this.username = username;
+        this.nickname = nickname;
+        this.password = password;
+        this.hasAvatar = hasAvatar;
+        this.role = role;
+        this.registerWay = registerWay;
+        this.createAt = createAt;
     }
 }

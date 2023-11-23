@@ -8,7 +8,7 @@
 <!--        from user u,wechat_user wu where u.username=wu.username and wu.open_id=#{openId}-->
 <!--    </select>-->
     <!--    通过openId查询用户信息-->
-    <select id="getByOpenid" resultType="com.ssgroup.zelu.pojo.User">
+    <select id="getUserByOpenid" resultType="com.ssgroup.zelu.pojo.User">
         select u.username,u.nickname,u.password,u.has_avatar,u.role,u.register_way,u.create_at
         from user u,wechat_user wu where u.username=wu.username and wu.openid=#{openid}
     </select>

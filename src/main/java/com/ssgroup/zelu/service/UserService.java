@@ -11,6 +11,7 @@ import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Slf4j
@@ -70,6 +71,7 @@ public class UserService {
      * @param code 微信授权码
      * @return 登录成功返回用户对象，否则返回null
      */
+    @Transactional
     public User loginWechat(String code){
 
         // 使用授权码换取微信用户信息
@@ -77,7 +79,7 @@ public class UserService {
         if (wechatUserAuth == null) return null;
 
         // 根据openid查询已存在的微信用户
-        User user = wechatUserMapper.getByOpenid(wechatUserAuth.getOpenid());
+        User user = wechatUserMapper.getUserByOpenid(wechatUserAuth.getOpenid());
 //        WechatUser wechatUser = findOpenid(wechatUserAuth.getOpenid());
         if (user != null) return user;
 
