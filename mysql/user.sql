@@ -4,9 +4,9 @@ create table user
     username        BIGINT auto_increment primary key      not null,
     nickname   char(16)                            not null,
     password   char(100)                           not null,
-    has_avatar tinyint(1) default 0                not null,
+    avatar_url varchar(255) default null         ,
     role       int        default 1                not null,
-    create_at  BIGINT  not null comment '秒级',
+    create_at  BIGINT  default now() not null comment '秒级',
     deleted    tinyint(1) default 0                not null,
     register_way  int        default 1 not null,
     constraint idx_username

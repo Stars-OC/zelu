@@ -43,7 +43,7 @@ public class JwtUtil {
                 .setExpiration(new Date(expire)) // 设置过期时间
                 .claim("username", user.getUsername()) // 添加用户名声明
                 .claim("nickname", user.getNickname()) // 添加昵称声明
-                .claim("hasAvatar", user.getHasAvatar()) // 添加是否有头像声明
+                .claim("avatarUrl", user.getAvatarUrl()) // 添加是否有头像声明
                 .claim("role", user.getRole()) // 添加角色声明
                 .claim("registerWay",user.getRegisterWay()) // 添加注册方式声明
                 .signWith(stringToSecretKey(SECRET)) // 使用SECRET作为签名密钥

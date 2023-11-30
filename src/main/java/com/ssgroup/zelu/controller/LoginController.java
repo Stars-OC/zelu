@@ -9,6 +9,7 @@ import com.ssgroup.zelu.utils.AesUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 @Slf4j
@@ -28,7 +29,7 @@ public class LoginController {
      * @return 登录成功返回JWT，登录失败返回"账号密码错误"
      */
     @PostMapping("/user/login")
-    public Result<String> login(@RequestBody UsernameAndPWD usernameAndPWD){
+    public Result<String> login(@Validated @RequestBody UsernameAndPWD usernameAndPWD){
 
         // 根据用户名查找用户
         User user = userService.findUsername(usernameAndPWD.getUsername());
@@ -77,10 +78,14 @@ public class LoginController {
      * @return 注册结果
      */
     @PostMapping("/user/register")
-    public Result<String> register(@RequestBody User user){
+    public Result<String> register(@Validated @RequestBody User user){
 
         if (userService.register(user)){
+
             String jwt = JwtUtil.createJwt(user, 10000);
+
+            log.info("账户 {} 注册成功" ,user.getUsername());
+
             return Result.success("账户注册成功",jwt);
         }
 
@@ -121,4 +126,9 @@ public class LoginController {
         return Result.success("刷新token成功",newToken);
     }
 
+
+    @GetMapping("/test")
+    public Result<User> test(){
+        return Result.success("test",userService.findUsername(Long.valueOf(1)));
+    }
 }

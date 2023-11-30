@@ -100,7 +100,7 @@ public class Result<T> implements Serializable {
      * 失 败 操 作, 携 带 自 定 义 状 态 码 和 自 定 义 消 息
      */
     public static <T> Result<T> failure(int code, String message) {
-        return failure(ResultCode.RC999.getCode(), message, null);
+        return failure(code, message, null);
     }
 
     /**

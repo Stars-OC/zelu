@@ -109,6 +109,7 @@ public class UserService {
      * @return 新用户对象
      */
     public User getNewUser(WechatUser wechatUser){
+
         User user = new User();
         String openid = wechatUser.getOpenid();
         String nickname = "微信用户" + openid.substring(0, 6);
@@ -128,16 +129,15 @@ public class UserService {
      * @return 注册是否成功
      */
     public boolean register(User user){
-        if (user == null){
-            return false;
-        }
 
         if (findUsername(user.getUsername()) != null){
             return false;
         }
         user.setPassword(AesUtil.encrypt(user.getPassword()));
+
         user.setRegisterWay(LoginWay.NORMAL_LOGIN.getCode());
-        user.setRole(0);
+
+        user.setCreateAt(System.currentTimeMillis()/1000);
         return userMapper.insert(user) > 0;
     }
 }
