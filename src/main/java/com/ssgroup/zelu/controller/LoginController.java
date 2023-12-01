@@ -9,6 +9,7 @@ import com.ssgroup.zelu.utils.AesUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -130,5 +131,11 @@ public class LoginController {
     @GetMapping("/test")
     public Result<User> test(){
         return Result.success("test",userService.findUsername(Long.valueOf(1)));
+    }
+
+    @GetMapping("/test2")
+    public ResponseEntity<Result<User>> test2(){
+        ResponseEntity.BodyBuilder status = ResponseEntity.status(404);
+        return status.body(Result.success("test",userService.findUsername(Long.valueOf(2234))));
     }
 }

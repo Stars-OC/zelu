@@ -89,6 +89,7 @@ public class LoginFilter implements Filter {
             result = mapper.writeValueAsString(Result.codeFailure(resultCode));
             // 返回错误信息
             response.getWriter().write(result);
+            response.setStatus(401);
         }
     }
 

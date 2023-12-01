@@ -4,6 +4,7 @@ import com.ssgroup.zelu.pojo.Result;
 import com.ssgroup.zelu.pojo.ResultCode;
 import jakarta.validation.ValidationException;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -28,13 +29,7 @@ public class GlobalErrorHandler {
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public Result<List<FieldError>> validationErrorHandler(MethodArgumentNotValidException e) {
 
-        String errorMsg = "";
-
-        for (ObjectError error : e.getBindingResult().getFieldErrors()) {
-            errorMsg += error.getDefaultMessage() + "\n";
-        }
-
         // 返回错误结果
-        return Result.failure(406,errorMsg);
+        return Result.codeFailure(ResultCode.RC406);
     }
 }
