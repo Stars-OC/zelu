@@ -20,9 +20,6 @@ public class LoginController {
     @Autowired
     private UserService userService;
 
-    @Value("${user.verifyTime}")
-    private int verifyTime;
-
     /**
      * 用户登录
      *
@@ -30,25 +27,10 @@ public class LoginController {
      * @return 登录成功返回JWT，登录失败返回"账号密码错误"
      */
     @PostMapping("/user/login")
-    public Result<String> login(@Validated @RequestBody UsernameAndPWD usernameAndPWD){
+    public Result login(@Validated @RequestBody UsernameAndPWD usernameAndPWD){
 
-        // 根据用户名查找用户
-        User user = userService.findUsername(usernameAndPWD.getUsername());
+        return userService.login(usernameAndPWD);
 
-        try {
-            // 判断密码是否匹配
-            String password = AesUtil.encrypt(usernameAndPWD.getPassword());
-            if (password.equals(user.getPassword())){
-                // 登录成功，返回JWT
-                String jwt = JwtUtil.createJwt(user, verifyTime);
-                return Result.success("登录成功",jwt);
-            }
-        }catch (NullPointerException e){
-            log.warn(e.getMessage());
-        }
-
-        // 密码不匹配或用户不存在，返回"账号密码错误"
-        return Result.failure("账号密码错误");
     }
 
     /**
@@ -57,17 +39,10 @@ public class LoginController {
      * @return 登录结果
      */
     @GetMapping("/user/login/wechat")
-    public Result<String> loginWechat(@RequestParam String code){
-        // 调用服务端的微信登录方法，传入授权码，返回用户信息
-        User user = userService.loginWechat(code);
-        // 如果用户为空，返回登录失败结果
-        if (user == null){
-            return Result.failure("登录失败 请重试");
-        }
-        // 利用用户信息生成JWT token，设置过期时间为10000秒
-        String jwt = JwtUtil.createJwt(user, verifyTime);
-        // 返回登录成功结果，包含JWT token
-        return Result.success("授权成功",jwt);
+    public Result loginWechat(@RequestParam String code){
+
+        return userService.loginWechat(code);
+
     }
 
 
@@ -79,18 +54,10 @@ public class LoginController {
      * @return 注册结果
      */
     @PostMapping("/user/register")
-    public Result<String> register(@Validated @RequestBody User user){
+    public Result register(@Validated @RequestBody User user){
 
-        if (userService.register(user)){
+        return userService.register(user);
 
-            String jwt = JwtUtil.createJwt(user, 10000);
-
-            log.info("账户 {} 注册成功" ,user.getUsername());
-
-            return Result.success("账户注册成功",jwt);
-        }
-
-        return Result.failure("账号已被注册");
     }
 
 
@@ -103,29 +70,13 @@ public class LoginController {
         return Result.success("token验证成功");
     }
 
-//    @GetMapping("/user/logout")
-//    public Result<String> logout(){
-//        return Result.success("退出成功");
-//    }
+    @GetMapping("/user/logout")
+    public Result<String> logout(){
 
-    /**
-     * 刷新token
-     * @param token 要刷新的token
-     * @return 刷新结果
-     */
-    @GetMapping("/refresh_token")
-    public Result<String> refreshToken(@RequestParam String token){
-        // 获取username
-        Long username = JwtUtil.getUsername(token);
-        if (username == null){
-            return Result.failure("token验证失败");
-        }
-        // 根据username查询用户信息
-        User user = userService.findUsername(username);
-        // 创建新的token
-        String newToken = JwtUtil.createJwt(user, verifyTime);
-        return Result.success("刷新token成功",newToken);
+        return Result.success("退出成功");
     }
+
+
 
 
     @GetMapping("/test")

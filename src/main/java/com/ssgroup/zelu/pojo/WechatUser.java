@@ -8,6 +8,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 import java.beans.Transient;
+import java.io.Serializable;
 
 @Data
 @TableName("wechat_user")

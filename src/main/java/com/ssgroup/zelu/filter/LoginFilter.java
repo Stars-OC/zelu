@@ -1,15 +1,19 @@
 package com.ssgroup.zelu.filter;
 
+import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ssgroup.zelu.pojo.Result;
 import com.ssgroup.zelu.pojo.ResultCode;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
+import io.netty.util.internal.StringUtil;
 import jakarta.servlet.*;
 import jakarta.servlet.annotation.WebFilter;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.StringRedisTemplate;
 
 import java.io.IOException;
 
@@ -17,7 +21,11 @@ import java.io.IOException;
 @WebFilter(urlPatterns = "/*")
 public class LoginFilter implements Filter {
 
+    @Autowired
+    private StringRedisTemplate redis;
+
     private final static ObjectMapper mapper = new ObjectMapper();
+
     /**
      * 过滤器方法，用于处理请求和响应
      *
@@ -48,23 +56,34 @@ public class LoginFilter implements Filter {
         response.setContentType("text/plain; charset=utf-8");
 
         String result = "";
-        // 如果token为空，则返回"token不存在，请登录"
-        if (token == null) {
-            result = mapper.writeValueAsString(Result.codeFailure(ResultCode.TOKEN_INVALID));
+
+        if (StringUtils.isEmpty(token)){
+            result = mapper.writeValueAsString(Result.codeFailure(ResultCode.INVALID_TOKEN));
+            response.setStatus(401);
             response.getWriter().write(result);
             return;
         }
 
         try {
+
             // 使用JwtUtil工具类获取token中的claims信息
             Claims claims = JwtUtil.getClaims(token);
             // 如果claims信息为空，则返回"token不存在，请登录"
             if (claims == null) {
                 result = mapper.writeValueAsString(Result.codeFailure(ResultCode.TOKEN_INVALID));
+                response.setStatus(401);
                 response.getWriter().write(result);
                 return;
             }
+            Long username = JwtUtil.getUsername(token);
 
+            String oldToken = redis.opsForValue().get(username.toString());
+            if (StringUtil.isNullOrEmpty(oldToken) ||!oldToken.equals(token)) {
+                result = mapper.writeValueAsString(Result.codeFailure(ResultCode.INVALID_TOKEN));
+                response.setStatus(401);
+                response.getWriter().write(result);
+                return;
+            }
             // 放行请求，继续处理
             chain.doFilter(servletRequest, servletResponse);
 
@@ -91,6 +110,9 @@ public class LoginFilter implements Filter {
             response.getWriter().write(result);
             response.setStatus(401);
         }
-    }
 
+
+    }
 }
+
+

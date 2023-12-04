@@ -38,15 +38,24 @@ public class JwtUtil {
         long expire = now + validTime * 3600000L;
 
         return Jwts.builder()
-                .setIssuer("zelu") // 设置签发者
-                .setIssuedAt(new Date(now)) // 设置签发时间
-                .setExpiration(new Date(expire)) // 设置过期时间
-                .claim("username", user.getUsername()) // 添加用户名声明
-                .claim("nickname", user.getNickname()) // 添加昵称声明
-                .claim("avatarUrl", user.getAvatarUrl()) // 添加是否有头像声明
-                .claim("role", user.getRole()) // 添加角色声明
-                .claim("registerWay",user.getRegisterWay()) // 添加注册方式声明
-                .signWith(stringToSecretKey(SECRET)) // 使用SECRET作为签名密钥
+                // 设置签发者
+                .setIssuer("zelu")
+                // 设置签发时间
+                .setIssuedAt(new Date(now))
+                // 设置过期时间
+                .setExpiration(new Date(expire))
+                // 添加用户名声明
+                .claim("username", user.getUsername())
+                // 添加昵称声明
+                .claim("nickname", user.getNickname())
+                // 添加头像声明
+                .claim("avatarUrl", user.getAvatarUrl())
+                // 添加角色声明
+                .claim("role", user.getRole())
+                // 添加注册方式声明
+                .claim("registerWay",user.getRegisterWay())
+                // 使用SECRET作为签名密钥
+                .signWith(stringToSecretKey(SECRET))
                 .compact(); // 缩小JWTToken长度
     }
 
@@ -73,7 +82,7 @@ public class JwtUtil {
      * 从 JWT 中取出 username
      * <p>此操作不验证 JWT 签名</p>
      *
-     * @return uid or null
+     * @return username or null
      */
     public static Long getUsername(String jwt) {
         // JWT 是 Base64Url 编码

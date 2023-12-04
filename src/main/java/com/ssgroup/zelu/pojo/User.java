@@ -35,6 +35,11 @@ public class User {
 
     @JsonIgnore
     private int registerWay;
+
+//    public void setRegisterWay(LoginWay loginWay) {
+//        this.registerWay = loginWay.getCode();
+//    }
+
     /**
      * 创建时间建议手动创建或者有参构造
      */

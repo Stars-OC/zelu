@@ -53,4 +53,5 @@ public enum LoginWay {
 
         this.loginWay = loginWay;
     }
+
 }

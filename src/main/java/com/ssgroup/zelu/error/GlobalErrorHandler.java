@@ -2,6 +2,7 @@ package com.ssgroup.zelu.error;
 
 import com.ssgroup.zelu.pojo.Result;
 import com.ssgroup.zelu.pojo.ResultCode;
+import jakarta.validation.ConstraintViolationException;
 import jakarta.validation.ValidationException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -20,16 +21,15 @@ public class GlobalErrorHandler {
 
     @ExceptionHandler(Exception.class)
     public Result<String> otherErrorHandler(Exception e) {
+
+        if (e instanceof MethodArgumentNotValidException || e instanceof ConstraintViolationException) {
+            return Result.codeFailure(ResultCode.RC406);
+        }
+
         // 处理其他异常的方法
-        log.error(e.getMessage());
+        log.error(e.getMessage(),e);
         // 返回错误结果
         return Result.codeFailure(ResultCode.RC404);
     }
 
-    @ExceptionHandler(MethodArgumentNotValidException.class)
-    public Result<List<FieldError>> validationErrorHandler(MethodArgumentNotValidException e) {
-
-        // 返回错误结果
-        return Result.codeFailure(ResultCode.RC406);
-    }
 }
