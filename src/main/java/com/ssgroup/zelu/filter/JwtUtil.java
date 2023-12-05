@@ -52,8 +52,8 @@ public class JwtUtil {
                 .claim("avatarUrl", user.getAvatarUrl())
                 // 添加角色声明
                 .claim("role", user.getRole())
-                // 添加注册方式声明
-                .claim("registerWay",user.getRegisterWay())
+                // 添加注册时间声明
+                .claim("createAt",user.getCreateAt())
                 // 使用SECRET作为签名密钥
                 .signWith(stringToSecretKey(SECRET))
                 .compact(); // 缩小JWTToken长度
@@ -100,4 +100,5 @@ public class JwtUtil {
             return null;
         }
     }
+
 }

@@ -1,24 +1,27 @@
 package com.ssgroup.zelu.controller;
 
-import com.ssgroup.zelu.filter.JwtUtil;
 import com.ssgroup.zelu.pojo.Result;
 import com.ssgroup.zelu.pojo.User;
 import com.ssgroup.zelu.pojo.UsernameAndPWD;
-import com.ssgroup.zelu.service.UserService;
-import com.ssgroup.zelu.utils.AesUtil;
+import com.ssgroup.zelu.service.AuthService;
+import com.ssgroup.zelu.service.JwtService;
+import jakarta.validation.constraints.NotEmpty;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 @Slf4j
 @RestController
+@Validated
+@RequestMapping("/auth")
 public class LoginController {
 
     @Autowired
-    private UserService userService;
+    private AuthService authService;
+
+    @Autowired
+    private JwtService jwtService;
 
     /**
      * 用户登录
@@ -26,10 +29,10 @@ public class LoginController {
      * @param usernameAndPWD 用户名和密码
      * @return 登录成功返回JWT，登录失败返回"账号密码错误"
      */
-    @PostMapping("/user/login")
+    @PostMapping("/login")
     public Result login(@Validated @RequestBody UsernameAndPWD usernameAndPWD){
 
-        return userService.login(usernameAndPWD);
+        return authService.login(usernameAndPWD);
 
     }
 
@@ -38,10 +41,10 @@ public class LoginController {
      * @param code 微信授权码
      * @return 登录结果
      */
-    @GetMapping("/user/login/wechat")
+    @GetMapping("/login/wechat")
     public Result loginWechat(@RequestParam String code){
 
-        return userService.loginWechat(code);
+        return authService.loginWechat(code);
 
     }
 
@@ -53,10 +56,10 @@ public class LoginController {
      * @param user 用户信息
      * @return 注册结果
      */
-    @PostMapping("/user/register")
+    @PostMapping("/register")
     public Result register(@Validated @RequestBody User user){
 
-        return userService.register(user);
+        return authService.register(user);
 
     }
 
@@ -66,27 +69,22 @@ public class LoginController {
      * @return 验证结果
      */
     @GetMapping("/verify")
-    public Result<String> verify(){
+    public Result verify(){
         return Result.success("token验证成功");
     }
 
-    @GetMapping("/user/logout")
-    public Result<String> logout(){
+    /**
+     * 退出登录
+     *
+     * @return 登录结果
+     */
+    @GetMapping("/logout")
+    public Result logout(@RequestParam @NotEmpty(message = "用户名不能为空") String username){
+
+        jwtService.deleteJwtByUsername(username);
 
         return Result.success("退出成功");
     }
 
 
-
-
-    @GetMapping("/test")
-    public Result<User> test(){
-        return Result.success("test",userService.findUsername(Long.valueOf(1)));
-    }
-
-    @GetMapping("/test2")
-    public ResponseEntity<Result<User>> test2(){
-        ResponseEntity.BodyBuilder status = ResponseEntity.status(404);
-        return status.body(Result.success("test",userService.findUsername(Long.valueOf(2234))));
-    }
 }

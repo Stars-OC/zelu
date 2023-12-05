@@ -32,19 +32,20 @@ public enum ResultCode {
     /**服务异常**/
     RC500(500,"系统异常，请稍后重试"),
 
-
-    /**
-     * 访问token已过期
-     */
-    TOKEN_EXPIRED(2001,"访问token已过期"),
     /**
      * 访问token无效
      */
-    TOKEN_INVALID(2002,"访问token无效"),
+    TOKEN_INVALID(4001,"访问token无效"),
+
     /**
      * 访问token不合法
      */
-    INVALID_TOKEN(2003,"访问token不合法"),
+    INVALID_TOKEN(4002,"访问token不合法"),
+    /**
+     * 访问token过期
+     */
+    TOKEN_EXPIRED(4003,"访问token过期"),
+    TOKEN_SIGN_ERROR(4004,"签名不匹配"),
     /**
      * 没有权限访问该资源
      */

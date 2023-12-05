@@ -7,6 +7,8 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.ssgroup.zelu.filter.JwtUtil;
+import io.jsonwebtoken.Claims;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
@@ -31,6 +33,7 @@ public class User {
 
     @URL(message = "头像地址不合法")
     private String avatarUrl;
+
     private int role;
 
     @JsonIgnore
@@ -61,10 +64,18 @@ public class User {
         this.password = password;
         this.avatarUrl = avatarUrl;
         this.role = role;
-        this.registerWay = registerWay;
         this.createAt = System.currentTimeMillis() / 1000;
     }
 
+
+    public User(String token){
+        Claims claims = JwtUtil.getClaims(token);
+        this.username = claims.get("username", Long.class);
+        this.nickname = claims.get("nickname", String.class);
+        this.avatarUrl = claims.get("avatarUrl", String.class);
+        this.createAt = claims.get("createAt", Long.class);
+        this.role = claims.get("role", Integer.class);
+    }
     public User(Long username, String nickname, String password, String avatarUrl, int role, int registerWay, long createAt) {
         this.username = username;
         this.nickname = nickname;

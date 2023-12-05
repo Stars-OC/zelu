@@ -1,12 +1,10 @@
 package com.ssgroup.zelu.filter;
 
-import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ssgroup.zelu.pojo.Result;
 import com.ssgroup.zelu.pojo.ResultCode;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
-import io.netty.util.internal.StringUtil;
 import jakarta.servlet.*;
 import jakarta.servlet.annotation.WebFilter;
 import jakarta.servlet.http.HttpServletRequest;
@@ -46,7 +44,7 @@ public class LoginFilter implements Filter {
         String url = request.getRequestURL().toString();
 
         // 如果URL包含"/user/login"或"/user/register"，则不进行鉴权，直接放行
-        if (url.contains("/user/login") || url.contains("/user/register")) {
+        if (url.contains("/auth/login") || url.contains("/auth/register")) {
             chain.doFilter(servletRequest, servletResponse);
             return;
         }
@@ -54,42 +52,29 @@ public class LoginFilter implements Filter {
         // 获取请求头中的token
         String token = request.getHeader("token");
         response.setContentType("text/plain; charset=utf-8");
-
-        String result = "";
-
-        if (StringUtils.isEmpty(token)){
-            result = mapper.writeValueAsString(Result.codeFailure(ResultCode.INVALID_TOKEN));
-            response.setStatus(401);
-            response.getWriter().write(result);
-            return;
-        }
-
+        ResultCode resultCode = null;
         try {
 
             // 使用JwtUtil工具类获取token中的claims信息
             Claims claims = JwtUtil.getClaims(token);
+
             // 如果claims信息为空，则返回"token不存在，请登录"
-            if (claims == null) {
-                result = mapper.writeValueAsString(Result.codeFailure(ResultCode.TOKEN_INVALID));
-                response.setStatus(401);
-                response.getWriter().write(result);
+
+            String username = String.valueOf(claims.get("username"));
+
+            String oldToken = redis.opsForValue().get(username);
+
+            if (oldToken.equals(token)) {
+                // 放行请求，继续处理
+                chain.doFilter(servletRequest, servletResponse);
                 return;
             }
-            Long username = JwtUtil.getUsername(token);
 
-            String oldToken = redis.opsForValue().get(username.toString());
-            if (StringUtil.isNullOrEmpty(oldToken) ||!oldToken.equals(token)) {
-                result = mapper.writeValueAsString(Result.codeFailure(ResultCode.INVALID_TOKEN));
-                response.setStatus(401);
-                response.getWriter().write(result);
-                return;
-            }
-            // 放行请求，继续处理
-            chain.doFilter(servletRequest, servletResponse);
+            resultCode = ResultCode.TOKEN_EXPIRED;
 
-        } catch (JwtException | IllegalArgumentException | StringIndexOutOfBoundsException e) {
+        } catch (JwtException | IllegalArgumentException | StringIndexOutOfBoundsException | NullPointerException e) {
             String errorMsg = e.getMessage();
-            ResultCode resultCode;
+
             log.warn("Token验证失败 : {}", errorMsg);
 
             // 如果抛出异常类型为StringIndexOutOfBoundsException，则将错误信息设置为"Token错误"
@@ -100,17 +85,19 @@ public class LoginFilter implements Filter {
                 resultCode = ResultCode.TOKEN_EXPIRED;
             // 如果抛出异常类型为"signature"，则将错误信息设置为"签名不匹配"
             } else if (errorMsg.contains("signature")) {
+                resultCode = ResultCode.TOKEN_SIGN_ERROR;
+            } else if (e instanceof NullPointerException | e instanceof IllegalArgumentException){
                 resultCode = ResultCode.INVALID_TOKEN;
-            } else {
+            }else {
                 resultCode = ResultCode.ACCESS_DENIED;
             }
 
-            result = mapper.writeValueAsString(Result.codeFailure(resultCode));
-            // 返回错误信息
-            response.getWriter().write(result);
-            response.setStatus(401);
-        }
 
+        }
+        String result = mapper.writeValueAsString(Result.codeFailure(resultCode));
+        // 返回错误信息
+        response.getWriter().write(result);
+        response.setStatus(401);
 
     }
 }

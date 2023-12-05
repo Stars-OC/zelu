@@ -28,5 +28,5 @@ wechat:
   appSecret: 48a9418d3fda5969ebaf737fcb7fc291
 
 user:
-  # 验证码有效时间
-  verifyTime: 10000
+  # 验证码有效时间 单位hour
+  verifyTime: 4
