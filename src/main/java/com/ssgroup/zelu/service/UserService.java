@@ -6,15 +6,21 @@ import com.ssgroup.zelu.mapper.UserMapper;
 import com.ssgroup.zelu.mapper.WechatUserMapper;
 import com.ssgroup.zelu.pojo.*;
 import com.ssgroup.zelu.utils.AesUtil;
+import com.ssgroup.zelu.utils.AliOSSUtil;
 import io.jsonwebtoken.Claims;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 @Service
@@ -27,7 +33,8 @@ public class UserService {
     @Autowired
     private JwtService jwtService;
 
-
+    @Autowired
+    private AvatarService avatarService;
 
     /**
      * 判断给定条件在指定数据表中是否存在
@@ -96,4 +103,48 @@ public class UserService {
         return Result.success("更新成功",jwt);
     }
 
+    public Result<String> uploadAvatarByOSS(MultipartFile file,String token) throws IOException {
+        //OSS写法
+        if (file.isEmpty()) {
+            return Result.failure("上传失败，请检查文件是否为空");
+        }
+        if (file.getSize() > 1024 * 1024 * 10) {
+            return Result.failure("上传失败，请检查文件大小是否超过10M");
+        }
+        String uploadUrl = AliOSSUtil.upload(file);
+        if (uploadUrl == null) {
+            return Result.failure("上传失败，请检查文件格式是否正确");
+        }
+        Long username = JwtUtil.getUsername(token);
+
+        userMapper.updateAvatar(username, uploadUrl);
+        String newToken = jwtService.uploadJwtByToken(token);
+        return Result.success("上传成功",newToken);
+    }
+
+    public Result<String> uploadAvatar(MultipartFile file, String token) throws IOException {
+        // 通过Local写法进行文件上传
+        if (file.isEmpty()) {
+            return Result.failure("上传失败，请检查文件是否为空");
+        }
+        if (file.getSize() > 1024 * 1024 * 10) {
+            return Result.failure("上传失败，请检查文件大小是否超过10M");
+        }
+        // 获取用户名
+        Long username = JwtUtil.getUsername(token);
+        // 进行文件上传并获取上传后的URL
+        String uploadUrl = avatarService.uploadAvatar(file, username);
+        if (uploadUrl == null) {
+            return Result.failure("上传失败，请检查文件格式是否正确");
+        }
+        // 更新用户头像路径
+        userMapper.updateAvatar(username, uploadUrl);
+        // 通过上传的token生成新的token
+        String newToken = jwtService.uploadJwtByToken(token);
+        return Result.success("上传成功", newToken);
+    }
+
+    public byte[] downloadAvatar(String username) throws IOException {
+        return avatarService.getAvatar(username);
+    }
 }

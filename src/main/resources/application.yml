@@ -30,3 +30,11 @@ wechat:
 user:
   # 验证码有效时间 单位hour
   verifyTime: 4
+
+fileUpload:
+  # 根路径
+  path: null
+  # 头像上传路径
+  avatar: avatar/
+
+  url: http://127.0.0.1:8080/
