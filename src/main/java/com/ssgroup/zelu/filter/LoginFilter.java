@@ -3,6 +3,7 @@ package com.ssgroup.zelu.filter;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ssgroup.zelu.pojo.Result;
 import com.ssgroup.zelu.pojo.ResultCode;
+import com.ssgroup.zelu.utils.JwtUtil;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
 import jakarta.servlet.*;
@@ -48,6 +49,11 @@ public class LoginFilter implements Filter {
             chain.doFilter(servletRequest, servletResponse);
             return;
         }
+
+        //CORS域 配置
+        response.addHeader("Access-Control-Allow-Origin", "*");
+        response.addHeader("Access-Control-Allow-Methods", "GET, POST");
+        response.addHeader("Access-Control-Allow-Headers", "Content-Type,token");
 
         // 获取请求头中的token
         String token = request.getHeader("token");

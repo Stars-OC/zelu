@@ -1,6 +1,6 @@
 package com.ssgroup.zelu.service;
 
-import com.ssgroup.zelu.filter.JwtUtil;
+import com.ssgroup.zelu.utils.JwtUtil;
 import com.ssgroup.zelu.mapper.UserMapper;
 import com.ssgroup.zelu.pojo.User;
 import org.springframework.beans.factory.annotation.Autowired;

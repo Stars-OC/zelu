@@ -30,7 +30,7 @@ public class LoginController {
      * @return 登录成功返回JWT，登录失败返回"账号密码错误"
      */
     @PostMapping("/login")
-    public Result login(@Validated @RequestBody UsernameAndPWD usernameAndPWD){
+    public Result<String> login(@Validated @RequestBody UsernameAndPWD usernameAndPWD){
 
         return authService.login(usernameAndPWD);
 
@@ -42,7 +42,7 @@ public class LoginController {
      * @return 登录结果
      */
     @GetMapping("/login/wechat")
-    public Result loginWechat(@RequestParam String code){
+    public Result<String> loginWechat(@RequestParam String code){
 
         return authService.loginWechat(code);
 
@@ -57,7 +57,7 @@ public class LoginController {
      * @return 注册结果
      */
     @PostMapping("/register")
-    public Result register(@Validated @RequestBody User user){
+    public Result<String> register(@Validated @RequestBody User user){
 
         return authService.register(user);
 
@@ -69,7 +69,7 @@ public class LoginController {
      * @return 验证结果
      */
     @GetMapping("/verify")
-    public Result verify(){
+    public Result<String> verify(){
         return Result.success("token验证成功");
     }
 
@@ -79,7 +79,7 @@ public class LoginController {
      * @return 登录结果
      */
     @GetMapping("/logout")
-    public Result logout(@RequestParam @NotEmpty(message = "用户名不能为空") String username){
+    public Result<String> logout(@RequestParam @NotEmpty(message = "用户名不能为空") String username){
 
         jwtService.deleteJwtByUsername(username);
 

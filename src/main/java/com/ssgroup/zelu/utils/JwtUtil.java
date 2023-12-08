@@ -1,4 +1,4 @@
-package com.ssgroup.zelu.filter;
+package com.ssgroup.zelu.utils;
 
 import com.fasterxml.jackson.core.JacksonException;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -19,7 +19,8 @@ import java.util.UUID;
 @Slf4j
 public class JwtUtil {
 
-    private final static String SECRET = UUID.randomUUID().toString().replaceAll("-", "");
+    //UUID.randomUUID().toString().replaceAll("-", "")
+    private final static String SECRET = "aa50cd4006444e498defcc8ffc07c6ab";
 
     private final static ObjectMapper mapper = new ObjectMapper();
 
@@ -85,12 +86,8 @@ public class JwtUtil {
      * @return username or null
      */
     public static Long getUsername(String jwt) {
-        // JWT 是 Base64Url 编码
-        String base64 = jwt.substring(jwt.indexOf('.') + 1, jwt.lastIndexOf('.'))
-                .replaceAll("-", "+")
-                .replaceAll("_", "/");
 
-        String payload = new String(Base64.getDecoder().decode(base64));
+        String payload = getPayload(jwt);
 
         try {
             JsonNode node = mapper.readTree(payload);
@@ -100,5 +97,41 @@ public class JwtUtil {
             return null;
         }
     }
+
+    /**
+     * 获取角色权限
+     * @param jwt JWT token
+     * @return 角色ID，如果获取失败返回null
+     */
+    public static Integer getRole(String jwt) {
+
+        String payload = getPayload(jwt);
+
+        try {
+            JsonNode node = mapper.readTree(payload);
+            return node.get("role").intValue();
+        } catch (JacksonException e) {
+            log.error("获取role失败从 token: {}",jwt);
+            return null;
+        }
+    }
+
+    /**
+     * 获取给定JWT的有效载荷。
+     *
+     * @param jwt JWT字符串
+     * @return 有效载荷字符串
+     */
+    private static String getPayload(String jwt) {
+        // JWT是Base64Url编码
+        // 在第一个和最后一个'.'发生的位置切割JWT字符串，并从中间部分删除'-'和'_'字符
+        String base64 = jwt.substring(jwt.indexOf('.') + 1, jwt.lastIndexOf('.'))
+                .replaceAll("-", "+")
+                .replaceAll("_", "/");
+
+        // 解码Base64编码字符串并将其转换为字符串
+        return new String(Base64.getDecoder().decode(base64));
+    }
+
 
 }

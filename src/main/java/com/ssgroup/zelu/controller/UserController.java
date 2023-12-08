@@ -2,7 +2,6 @@ package com.ssgroup.zelu.controller;
 
 import com.ssgroup.zelu.pojo.Result;
 import com.ssgroup.zelu.pojo.User;
-import com.ssgroup.zelu.service.AvatarService;
 import com.ssgroup.zelu.service.JwtService;
 import com.ssgroup.zelu.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,7 +45,7 @@ public class UserController {
      * @return 返回用户信息的结果对象
      */
     @GetMapping("/info")
-    public Result userInfo(@RequestHeader String token){
+    public Result<User> userInfo(@RequestHeader String token){
         return userService.getUserInfo(token);
     }
 
@@ -59,7 +58,7 @@ public class UserController {
      * @return 结果对象
      */
     @PostMapping("/upload/info")
-    public Result uploadInfo(@RequestBody @Validated User user,@RequestHeader String token){
+    public Result<String> uploadInfo(@RequestBody @Validated User user,@RequestHeader String token){
 
         return userService.uploadInfo(user,token);
     }
@@ -74,7 +73,7 @@ public class UserController {
      * @throws IOException 异常情况
      */
     @PostMapping("/upload/avatar/oss")
-    public Result uploadAvatarByOSS(@RequestBody MultipartFile file,@RequestHeader String token) throws IOException {
+    public Result<String> uploadAvatarByOSS(@RequestBody MultipartFile file,@RequestHeader String token) throws IOException {
         //TODO 后面接口可以用文件系统读写，以username为标识
         return userService.uploadAvatarByOSS(file,token);
     }
@@ -87,8 +86,8 @@ public class UserController {
      * @throws IOException 如果发生I/O错误
      */
     @PostMapping("/upload/avatar")
-    public Result uploadAvatar(@RequestBody MultipartFile file,@RequestHeader String token) throws IOException {
-        return userService.uploadAvatar(file,token);
+    public Result<String> uploadAvatar(@RequestBody MultipartFile file,@RequestHeader String token) throws IOException {
+        return userService.uploadAvatarByLocal(file,token);
     }
 
 

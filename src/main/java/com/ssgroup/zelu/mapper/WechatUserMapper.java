@@ -15,5 +15,4 @@ public interface WechatUserMapper extends BaseMapper<WechatUser> {
      */
     User getUserByOpenid(String openid);
 
-//    WechatUser findUserByOpenId(String openid);
 }

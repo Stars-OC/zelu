@@ -1,19 +1,14 @@
 package com.ssgroup.zelu.service;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.ssgroup.zelu.filter.JwtUtil;
 import com.ssgroup.zelu.mapper.UserMapper;
 import com.ssgroup.zelu.mapper.WechatUserMapper;
 import com.ssgroup.zelu.pojo.*;
 import com.ssgroup.zelu.utils.AesUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.concurrent.TimeUnit;
 
 @Service
 @Slf4j

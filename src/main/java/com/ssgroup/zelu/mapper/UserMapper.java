@@ -20,10 +20,6 @@ public interface UserMapper extends BaseMapper<User> {
     void updateAvatar(Long username, String uploadUrl);
 
 
-//    /** 用来通过@username来获取user对象    */
-//    @Select("select username,nickname,password,has_avatar,role,register_way from user where username = #{username} and deleted = false;")
-//    User findByUsername(@Param("username") Long username);
-
 
 
 }

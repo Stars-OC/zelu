@@ -1,27 +1,21 @@
 package com.ssgroup.zelu.service;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.ssgroup.zelu.filter.JwtUtil;
+import com.baomidou.mybatisplus.core.toolkit.StringUtils;
+import com.ssgroup.zelu.config.FileConfiguration;
+import com.ssgroup.zelu.utils.JwtUtil;
 import com.ssgroup.zelu.mapper.UserMapper;
-import com.ssgroup.zelu.mapper.WechatUserMapper;
 import com.ssgroup.zelu.pojo.*;
 import com.ssgroup.zelu.utils.AesUtil;
 import com.ssgroup.zelu.utils.AliOSSUtil;
-import io.jsonwebtoken.Claims;
-import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.redis.core.StringRedisTemplate;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.UUID;
-import java.util.concurrent.TimeUnit;
+import java.nio.file.Files;
 
 @Service
 @Slf4j
@@ -34,7 +28,7 @@ public class UserService {
     private JwtService jwtService;
 
     @Autowired
-    private AvatarService avatarService;
+    private FileConfiguration file;
 
     /**
      * 判断给定条件在指定数据表中是否存在
@@ -103,6 +97,14 @@ public class UserService {
         return Result.success("更新成功",jwt);
     }
 
+    /**
+     * 通过OSS上传头像
+     *
+     * @param file          头像文件
+     * @param token         JWT token
+     * @return              上传结果及新的token
+     * @throws IOException  IO异常
+     */
     public Result<String> uploadAvatarByOSS(MultipartFile file,String token) throws IOException {
         //OSS写法
         if (file.isEmpty()) {
@@ -122,7 +124,15 @@ public class UserService {
         return Result.success("上传成功",newToken);
     }
 
-    public Result<String> uploadAvatar(MultipartFile file, String token) throws IOException {
+    /**
+     * 通过本地文件上传工具进行头像上传
+     *
+     * @param file 上传的头像文件
+     * @param token 上传凭证
+     * @return 上传结果及新的token
+     * @throws IOException 文件读取或上传过程中发生IO异常
+     */
+    public Result<String> uploadAvatarByLocal(MultipartFile file, String token) throws IOException {
         // 通过Local写法进行文件上传
         if (file.isEmpty()) {
             return Result.failure("上传失败，请检查文件是否为空");
@@ -133,7 +143,7 @@ public class UserService {
         // 获取用户名
         Long username = JwtUtil.getUsername(token);
         // 进行文件上传并获取上传后的URL
-        String uploadUrl = avatarService.uploadAvatar(file, username);
+        String uploadUrl = uploadAvatarByLocal(file, username);
         if (uploadUrl == null) {
             return Result.failure("上传失败，请检查文件格式是否正确");
         }
@@ -144,7 +154,65 @@ public class UserService {
         return Result.success("上传成功", newToken);
     }
 
+    /**
+     * 下载用户头像
+     *
+     * @param username 用户名
+     * @return 下载的头像数据
+     * @throws IOException 如果发生I/O错误
+     */
     public byte[] downloadAvatar(String username) throws IOException {
-        return avatarService.getAvatar(username);
+        return getAvatar(username);
+    }
+
+
+    /**
+     * 获取头像数据
+     * @param avatar 头像路径
+     * @return 头像数据的字节数组
+     * @throws IOException 输入输出异常
+     */
+    public byte[] getAvatar(String avatar) throws IOException {
+        // 如果头像路径为空
+        if (StringUtils.isEmpty(avatar)) {
+            // 返回空字节数组
+            return null;
+        }
+        // 构建头像文件路径
+        String path = file.getAvatarPath() + avatar;
+        // 创建头像文件对象
+        File file = new File(path);
+        // 如果头像文件存在
+        if (file.exists()) {
+            // 返回头像文件的字节数组
+            return Files.readAllBytes(file.toPath());
+        }
+        // 头像文件不存在，返回空字节数组
+        return null;
+    }
+
+
+    /**
+     * 上传头像
+     * @param multipartFile 多部分文件（包含头像文件）
+     * @param username 用户名
+     * @return 上传后的头像URL
+     * @throws IOException 如果发生I/O错误
+     */
+    public String uploadAvatarByLocal(MultipartFile multipartFile, Long username) throws IOException {
+        // 获取文件名称
+        String fileName = multipartFile.getOriginalFilename();
+
+        int i = fileName.lastIndexOf(".");
+        String suffix = fileName.substring(i);
+
+        String name = username + suffix;
+
+        String path = file.getAvatarPath() + name;
+
+        File avatar = new File(path);
+        multipartFile.transferTo(avatar);
+
+        return file.getAvatarUrl(name);
     }
 }
