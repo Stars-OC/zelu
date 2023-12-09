@@ -59,7 +59,9 @@ public class LoginController {
     @PostMapping("/register")
     public Result<String> register(@Validated @RequestBody User user){
 
-        return authService.register(user);
+        String jwt = authService.register(user);
+
+        return jwt != null ? Result.success("注册成功",jwt) : Result.failure("注册失败");
 
     }
 

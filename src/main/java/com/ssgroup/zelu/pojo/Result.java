@@ -1,6 +1,7 @@
 package com.ssgroup.zelu.pojo;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.ssgroup.zelu.pojo.type.ResultCode;
 import lombok.Data;
 
 import java.io.Serializable;

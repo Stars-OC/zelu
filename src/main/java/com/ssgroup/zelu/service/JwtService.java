@@ -49,6 +49,21 @@ public class JwtService {
 
         // 获取用户名
         Long username = JwtUtil.getUsername(token);
+
+        // 根据用户名更新token
+        String newToken = uploadJwtByUsername(username);
+
+        // 返回新的Jwt令牌
+        return newToken;
+    }
+
+    /**
+     * 根据用户名获取并返回新的Jwt令牌
+     *
+     * @param username 用户名
+     * @return 新的Jwt令牌，如果用户不存在则返回null
+     */
+    public String uploadJwtByUsername(Long username) {
         // 根据用户名查询用户信息
         User user = userMapper.selectById(username);
 

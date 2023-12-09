@@ -3,6 +3,7 @@ package com.ssgroup.zelu.service;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.ssgroup.zelu.config.FileConfiguration;
+import com.ssgroup.zelu.aop.permission.Permission;
 import com.ssgroup.zelu.utils.JwtUtil;
 import com.ssgroup.zelu.mapper.UserMapper;
 import com.ssgroup.zelu.pojo.*;
@@ -64,11 +65,9 @@ public class UserService {
      * @param token 用户的token
      * @return 返回包含成功标志和用户信息的结果对象
      */
-    public Result<User> getUserInfo(String token) {
+    public User getUserInfo(String token) {
 
-        User user = new User(token);
-
-        return Result.success("获取成功", user);
+        return new User(token);
     }
 
 
@@ -79,7 +78,7 @@ public class UserService {
      * @param token   当前用户的token
      * @return 更新结果及更新后的用户对象
      */
-    public Result<String> uploadInfo(User user, String token) {
+    public String uploadInfo(User user, String token) {
 
         User oldUser = new User(token);
         // 设置更新后的用户名为原用户的用户名
@@ -94,7 +93,7 @@ public class UserService {
         userMapper.updateById(user);
         String jwt = jwtService.createJwt(user);
         // 返回更新成功的提示信息及更新后的用户对象
-        return Result.success("更新成功",jwt);
+        return jwt;
     }
 
     /**
@@ -107,16 +106,11 @@ public class UserService {
      */
     public Result<String> uploadAvatarByOSS(MultipartFile file,String token) throws IOException {
         //OSS写法
-        if (file.isEmpty()) {
-            return Result.failure("上传失败，请检查文件是否为空");
-        }
-        if (file.getSize() > 1024 * 1024 * 10) {
-            return Result.failure("上传失败，请检查文件大小是否超过10M");
-        }
         String uploadUrl = AliOSSUtil.upload(file);
         if (uploadUrl == null) {
-            return Result.failure("上传失败，请检查文件格式是否正确");
+            return null;
         }
+
         Long username = JwtUtil.getUsername(token);
 
         userMapper.updateAvatar(username, uploadUrl);
@@ -132,26 +126,20 @@ public class UserService {
      * @return 上传结果及新的token
      * @throws IOException 文件读取或上传过程中发生IO异常
      */
-    public Result<String> uploadAvatarByLocal(MultipartFile file, String token) throws IOException {
+    public String uploadAvatarByLocal(MultipartFile file, String token) throws IOException {
         // 通过Local写法进行文件上传
-        if (file.isEmpty()) {
-            return Result.failure("上传失败，请检查文件是否为空");
-        }
-        if (file.getSize() > 1024 * 1024 * 10) {
-            return Result.failure("上传失败，请检查文件大小是否超过10M");
-        }
         // 获取用户名
         Long username = JwtUtil.getUsername(token);
         // 进行文件上传并获取上传后的URL
         String uploadUrl = uploadAvatarByLocal(file, username);
         if (uploadUrl == null) {
-            return Result.failure("上传失败，请检查文件格式是否正确");
+            return null;
         }
         // 更新用户头像路径
         userMapper.updateAvatar(username, uploadUrl);
         // 通过上传的token生成新的token
         String newToken = jwtService.uploadJwtByToken(token);
-        return Result.success("上传成功", newToken);
+        return newToken;
     }
 
     /**
@@ -215,4 +203,5 @@ public class UserService {
 
         return file.getAvatarUrl(name);
     }
+
 }

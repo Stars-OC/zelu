@@ -2,7 +2,7 @@ package com.ssgroup.zelu.filter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ssgroup.zelu.pojo.Result;
-import com.ssgroup.zelu.pojo.ResultCode;
+import com.ssgroup.zelu.pojo.type.ResultCode;
 import com.ssgroup.zelu.utils.JwtUtil;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;

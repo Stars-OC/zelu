@@ -17,6 +17,7 @@ import java.io.IOException;
 @RestController
 @RequestMapping("/api/user")
 public class UserController {
+    //TODO 后面将获取token的转化为@RequestUser注解
 
     @Autowired
     private UserService userService;
@@ -46,7 +47,9 @@ public class UserController {
      */
     @GetMapping("/info")
     public Result<User> userInfo(@RequestHeader String token){
-        return userService.getUserInfo(token);
+        return userService.getUserInfo(token) != null?
+                Result.success("获取用户信息成功",userService.getUserInfo(token)) :
+                Result.failure("获取用户信息失败");
     }
 
 
@@ -60,7 +63,9 @@ public class UserController {
     @PostMapping("/upload/info")
     public Result<String> uploadInfo(@RequestBody @Validated User user,@RequestHeader String token){
 
-        return userService.uploadInfo(user,token);
+        return userService.uploadInfo(user,token) != null?
+                Result.success("上传用户信息成功") :
+                Result.failure("上传用户信息失败");
     }
 
 
@@ -74,7 +79,12 @@ public class UserController {
      */
     @PostMapping("/upload/avatar/oss")
     public Result<String> uploadAvatarByOSS(@RequestBody MultipartFile file,@RequestHeader String token) throws IOException {
-        //TODO 后面接口可以用文件系统读写，以username为标识
+        if (file.isEmpty()) {
+            return Result.failure("上传失败，请检查文件是否为空");
+        }
+        if (file.getSize() > 1024 * 1024 * 10) {
+            return Result.failure("上传失败，请检查文件大小是否超过10M");
+        }
         return userService.uploadAvatarByOSS(file,token);
     }
 
@@ -87,7 +97,16 @@ public class UserController {
      */
     @PostMapping("/upload/avatar")
     public Result<String> uploadAvatar(@RequestBody MultipartFile file,@RequestHeader String token) throws IOException {
-        return userService.uploadAvatarByLocal(file,token);
+        if (file.isEmpty()) {
+            return Result.failure("上传失败，请检查文件是否为空");
+        }
+        if (file.getSize() > 1024 * 1024 * 10) {
+            return Result.failure("上传失败，请检查文件大小是否超过10M");
+        }
+        String newToken = userService.uploadAvatarByLocal(file, token);
+        return newToken != null ?
+                Result.success("上传头像成功",newToken) :
+                Result.failure("上传头像失败");
     }
 
 

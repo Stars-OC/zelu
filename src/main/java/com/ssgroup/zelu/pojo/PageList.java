@@ -12,10 +12,6 @@ public class PageList<T> {
     private Long count;
     private List<T> data;
 
-    public PageList(List<T> data) {
-        this.count = (long) data.size();
-        this.data = data;
-    }
     public PageList(Page<T> page) {
         this.count = page.getTotal();
         this.data = page.getRecords();

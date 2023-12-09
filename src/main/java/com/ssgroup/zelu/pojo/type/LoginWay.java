@@ -1,4 +1,4 @@
-package com.ssgroup.zelu.pojo;
+package com.ssgroup.zelu.pojo.type;
 
 import lombok.Getter;
 

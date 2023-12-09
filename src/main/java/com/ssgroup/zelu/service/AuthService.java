@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.ssgroup.zelu.mapper.UserMapper;
 import com.ssgroup.zelu.mapper.WechatUserMapper;
 import com.ssgroup.zelu.pojo.*;
+import com.ssgroup.zelu.pojo.type.LoginWay;
 import com.ssgroup.zelu.utils.AesUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -166,7 +167,7 @@ public class AuthService {
      * @param user 要注册的用户对象
      * @return 注册是否成功
      */
-    public Result<String> register(User user){
+    public String register(User user){
 
         Long username = user.getUsername();
         if (findUsername(username) == null){
@@ -178,10 +179,10 @@ public class AuthService {
             userMapper.insert(user);
 
             String jwt = jwtService.createJwt(user);
-            return Result.success("注册成功",jwt);
+            return jwt;
         }
 
-        return Result.failure("账号已被注册");
+        return null;
     }
 
 
