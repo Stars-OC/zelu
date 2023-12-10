@@ -17,7 +17,7 @@ import java.lang.reflect.Method;
 
 @Aspect
 @Component
-@Order(1)
+@Order(5)
 public class RequestUserAspect {
 
     @Pointcut("@annotation(com.ssgroup.zelu.aop.RequestUser)")
@@ -33,8 +33,9 @@ public class RequestUserAspect {
      * @return 方法调用的返回值
      * @throws Throwable 可能抛出的异常
      */
-    @Around("requestUserPointCut() && args(user)")
+    @Around("requestUserPointCut() && args(user,..)")
     public Object parseUser(ProceedingJoinPoint joinPoint, User user) throws Throwable {
+
         MethodSignature signature = (MethodSignature) joinPoint.getSignature();
         Method method = signature.getMethod();
         RequestUser requestUser = method.getAnnotation(RequestUser.class);

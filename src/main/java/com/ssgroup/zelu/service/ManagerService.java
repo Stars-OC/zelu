@@ -2,19 +2,15 @@ package com.ssgroup.zelu.service;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.ssgroup.zelu.mapper.UserMapper;
-import com.ssgroup.zelu.aop.permission.Permission;
 import com.ssgroup.zelu.pojo.PageList;
-import com.ssgroup.zelu.pojo.Result;
-import com.ssgroup.zelu.pojo.type.ResultCode;
 import com.ssgroup.zelu.pojo.User;
-import com.ssgroup.zelu.utils.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
 
 @Service
-public class UserManagerService {
+public class ManagerService {
 
     @Autowired
     private UserMapper userMapper;
@@ -27,6 +23,7 @@ public class UserManagerService {
     }
 
     public void updateUser(User user) throws Exception{
+
         userMapper.updateById(user);
     }
 

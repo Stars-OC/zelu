@@ -6,6 +6,7 @@ import com.ssgroup.zelu.service.JwtService;
 import com.ssgroup.zelu.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -17,7 +18,6 @@ import java.io.IOException;
 @RestController
 @RequestMapping("/api/user")
 public class UserController {
-    //TODO 后面将获取token的转化为@RequestUser注解
 
     @Autowired
     private UserService userService;
@@ -29,6 +29,7 @@ public class UserController {
 
     /**
      * 刷新token
+     *
      * @param token 要刷新的token
      * @return 刷新结果
      */
@@ -90,6 +91,7 @@ public class UserController {
 
     /**
      * 上传用户头像
+     *
      * @param file 要上传的文件
      * @param token 请求头中的token
      * @return 返回上传结果
@@ -130,7 +132,7 @@ public class UserController {
         headers.setContentDispositionFormData("attachment", username + ".jpg");
 
         // 返回 ResponseEntity 类型对象，包含字节数组、响应头和状态码
-        return new ResponseEntity<>(bytes, headers, org.springframework.http.HttpStatus.OK);
+        return new ResponseEntity<>(bytes, HttpStatus.OK);
     }
 
 
