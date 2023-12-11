@@ -1,7 +1,7 @@
-package com.ssgroup.zelu.service;
+package com.ssgroup.zelu.service.auth;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ssgroup.zelu.pojo.WechatUser;
+import com.ssgroup.zelu.pojo.user.WechatUser;
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;

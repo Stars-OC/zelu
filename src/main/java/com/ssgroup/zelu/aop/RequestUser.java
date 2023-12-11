@@ -9,7 +9,8 @@ import java.lang.annotation.Target;
  * @author Clusters_stars
  */
 @Retention(RetentionPolicy.RUNTIME)
-@Target({ElementType.METHOD})
+@Target({ElementType.PARAMETER})
 public @interface RequestUser {
-    String value() default "";
+    String value() default "token";
+    boolean required() default true;
 }

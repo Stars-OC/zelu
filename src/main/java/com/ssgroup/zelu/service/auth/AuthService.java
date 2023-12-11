@@ -1,10 +1,13 @@
-package com.ssgroup.zelu.service;
+package com.ssgroup.zelu.service.auth;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.ssgroup.zelu.mapper.UserMapper;
 import com.ssgroup.zelu.mapper.WechatUserMapper;
-import com.ssgroup.zelu.pojo.*;
+import com.ssgroup.zelu.pojo.Result;
 import com.ssgroup.zelu.pojo.type.LoginWay;
+import com.ssgroup.zelu.pojo.user.User;
+import com.ssgroup.zelu.pojo.UsernameAndPWD;
+import com.ssgroup.zelu.pojo.user.WechatUser;
 import com.ssgroup.zelu.utils.AesUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

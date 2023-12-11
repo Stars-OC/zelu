@@ -1,14 +1,10 @@
-package com.ssgroup.zelu.pojo;
+package com.ssgroup.zelu.pojo.user;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
-
-import java.beans.Transient;
-import java.io.Serializable;
 
 @Data
 @TableName("wechat_user")

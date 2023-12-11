@@ -1,10 +1,10 @@
 package com.ssgroup.zelu.controller;
 
 import com.ssgroup.zelu.pojo.Result;
-import com.ssgroup.zelu.pojo.User;
+import com.ssgroup.zelu.pojo.user.User;
 import com.ssgroup.zelu.pojo.UsernameAndPWD;
-import com.ssgroup.zelu.service.AuthService;
-import com.ssgroup.zelu.service.JwtService;
+import com.ssgroup.zelu.service.auth.AuthService;
+import com.ssgroup.zelu.service.auth.JwtService;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

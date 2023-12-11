@@ -1,4 +1,4 @@
-package com.ssgroup.zelu.pojo;
+package com.ssgroup.zelu.pojo.user;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;

@@ -1,9 +1,8 @@
 package com.ssgroup.zelu.aop;
 
-import com.ssgroup.zelu.pojo.User;
+import com.ssgroup.zelu.pojo.user.User;
 import jakarta.servlet.http.HttpServletRequest;
 import org.aspectj.lang.ProceedingJoinPoint;
-import org.aspectj.lang.Signature;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
@@ -15,7 +14,7 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 
 import java.lang.reflect.Method;
 
-@Aspect
+//@Aspect
 @Component
 @Order(5)
 public class RequestUserAspect {

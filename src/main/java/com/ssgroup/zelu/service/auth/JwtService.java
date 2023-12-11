@@ -1,8 +1,8 @@
-package com.ssgroup.zelu.service;
+package com.ssgroup.zelu.service.auth;
 
-import com.ssgroup.zelu.utils.JwtUtil;
 import com.ssgroup.zelu.mapper.UserMapper;
-import com.ssgroup.zelu.pojo.User;
+import com.ssgroup.zelu.pojo.user.User;
+import com.ssgroup.zelu.utils.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.StringRedisTemplate;

@@ -18,6 +18,7 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -51,12 +52,10 @@ public class PermissionAspect {
     @Around("annotationPointCut() && !withinPointCut()")
     public Object methodCheck(ProceedingJoinPoint point) throws Throwable{
 
-        Role[] values = getMethodValues(point);
-
-        if (checkPermission(values)) return point.proceed();
+        Role[] value = getMethodValues(point);
 
         // 没有权限，返回权限失败的结果
-        return Result.codeFailure(ResultCode.ACCESS_DENIED);
+        return (checkPermission(value))? point.proceed() : Result.codeFailure(ResultCode.ACCESS_DENIED);
     }
 
     /**
@@ -71,8 +70,7 @@ public class PermissionAspect {
 
         Role[] value = getClassValues(point);
 
-        if (checkPermission(value)) return point.proceed();
-        return Result.codeFailure(ResultCode.ACCESS_DENIED);
+        return (checkPermission(value))? point.proceed() : Result.codeFailure(ResultCode.ACCESS_DENIED);
     }
 
 
@@ -85,16 +83,27 @@ public class PermissionAspect {
      */
     @Around("withinPointCut() && annotationPointCut()")
     public Object classAndMethodCheck(ProceedingJoinPoint point) throws Throwable {
+        //若类 的 isIndividual()为true，则方法中的isIndividual()就不用获取
+        boolean flag = false;
         // 获取方法上的Permission注解
         Permission annotation = point.getTarget().getClass().getAnnotation(Permission.class);
-        Role[] values = annotation.value();
-        Set<Role> roles = Arrays.stream(values).collect(Collectors.toSet());
+
+        Set<Role> roles = new HashSet<>();
+
+        if (!annotation.isIndividual()) {
+            // 如果类上的Permission注解为isIndividual() false，则获取类上的Permission注解中的角色
+            Role[] values = annotation.value();
+            roles = Arrays.stream(values).collect(Collectors.toSet());
+            flag = true;
+        }
+
+
         // 获取方法对象
         Method method = getMethod(point);
         // 获取方法上的Permission注解
         Permission methodAnnotation = method.getAnnotation(Permission.class);
-        if (methodAnnotation.isIndividual()) {
-            // 如果方法上的Permission注解为isIndividual() true，则清空角色集合
+        if (flag || methodAnnotation.isIndividual()) {
+            // 如果方法上的Permission注解为isIndividual() true 或者类的isIndividual() true ，则清空角色集合
             roles.clear();
         }
         // 将方法上的Permission注解中的角色添加到角色集合中
@@ -102,9 +111,8 @@ public class PermissionAspect {
         // 将角色集合转换为数组
         Role[] value = roles.toArray(new Role[0]);
         // 判断是否具有执行当前方法的权限，如果没有则返回访问失败的结果
-        if (checkPermission(value)) return point.proceed();
         // 返回访问失败的结果
-        return Result.codeFailure(ResultCode.ACCESS_DENIED);
+        return (checkPermission(value))? point.proceed() : Result.codeFailure(ResultCode.ACCESS_DENIED);
     }
 
 

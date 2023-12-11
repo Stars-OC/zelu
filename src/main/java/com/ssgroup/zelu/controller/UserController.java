@@ -1,8 +1,8 @@
 package com.ssgroup.zelu.controller;
 
 import com.ssgroup.zelu.pojo.Result;
-import com.ssgroup.zelu.pojo.User;
-import com.ssgroup.zelu.service.JwtService;
+import com.ssgroup.zelu.pojo.user.User;
+import com.ssgroup.zelu.service.auth.JwtService;
 import com.ssgroup.zelu.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;

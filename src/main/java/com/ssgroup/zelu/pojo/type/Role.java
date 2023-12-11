@@ -1,10 +1,6 @@
 package com.ssgroup.zelu.pojo.type;
 
 import lombok.Getter;
-import org.springframework.context.annotation.Bean;
-
-import java.util.ArrayList;
-import java.util.Arrays;
 
 public enum Role {
 
