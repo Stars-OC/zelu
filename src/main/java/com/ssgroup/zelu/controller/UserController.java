@@ -41,7 +41,8 @@ public class UserController {
     }
 
     /**
-     * 获取用户信息
+     * @deprecated 获取用户信息 (前端可以直接取playload中的用户信息)
+     *
      *
      * @param token 用户的token
      * @return 返回用户信息的结果对象
@@ -58,14 +59,14 @@ public class UserController {
      * 上传用户信息
      *
      * @param user 用户信息
-     * @param token 请求头token
      * @return 结果对象
      */
     @PostMapping("/upload/info")
-    public Result<String> uploadInfo(@RequestBody @Validated User user,@RequestHeader String token){
+    public Result<String> uploadInfo(@RequestBody @Validated User user){
 
-        return userService.uploadInfo(user,token) != null?
-                Result.success("上传用户信息成功") :
+        String jwt = userService.uploadInfo(user);
+        return jwt != null?
+                Result.success("上传用户信息成功",jwt) :
                 Result.failure("上传用户信息失败");
     }
 
@@ -115,6 +116,7 @@ public class UserController {
 
     /**
      * 根据用户名下载头像
+     *
      * @param username 用户名
      * @return 返回 ResponseEntity 类型对象
      * @throws IOException 异常
@@ -123,7 +125,7 @@ public class UserController {
     public ResponseEntity<byte[]> downloadAvatar(@PathVariable String username) throws IOException {
         // 设置响应头
         HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.IMAGE_JPEG);
+        headers.setContentType(MediaType.IMAGE_PNG);
 
         // 从用户服务中下载头像字节数组
         byte[] bytes = userService.downloadAvatar(username);
@@ -132,7 +134,7 @@ public class UserController {
         headers.setContentDispositionFormData("attachment", username + ".jpg");
 
         // 返回 ResponseEntity 类型对象，包含字节数组、响应头和状态码
-        return new ResponseEntity<>(bytes, HttpStatus.OK);
+        return new ResponseEntity<>(bytes, headers,HttpStatus.OK);
     }
 
 

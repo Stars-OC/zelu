@@ -17,9 +17,9 @@ public enum Role {
      */
     TEACHER(2),
     /**
-     * 学校管理员
+     * 部门管理员
      */
-    SCHOOL_ADMIN(3),
+    Dept_ADMIN(3),
     /**
      * 管理员
      */

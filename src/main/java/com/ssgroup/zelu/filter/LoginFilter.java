@@ -43,7 +43,7 @@ public class LoginFilter implements Filter {
 
         // 获取请求的URL
         String url = request.getRequestURL().toString();
-
+//        chain.doFilter(servletRequest, servletResponse);
         // 如果URL包含"/user/login"或"/user/register"，则不进行鉴权，直接放行
         if (url.contains("/auth/login") || url.contains("/auth/register")) {
             chain.doFilter(servletRequest, servletResponse);
@@ -51,9 +51,9 @@ public class LoginFilter implements Filter {
         }
 
         //CORS域 配置
-        response.addHeader("Access-Control-Allow-Origin", "*");
-        response.addHeader("Access-Control-Allow-Methods", "GET, POST");
-        response.addHeader("Access-Control-Allow-Headers", "Content-Type,token");
+//        response.addHeader("Access-Control-Allow-Origin", "*");
+//        response.addHeader("Access-Control-Allow-Methods", "GET, POST");
+//        response.addHeader("Access-Control-Allow-Headers", "Content-Type,token");
 
         // 获取请求头中的token
         String token = request.getHeader("token");

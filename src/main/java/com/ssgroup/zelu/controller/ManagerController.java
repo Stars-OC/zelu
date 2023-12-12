@@ -5,7 +5,7 @@ import com.ssgroup.zelu.aop.permission.Permission;
 import com.ssgroup.zelu.pojo.PageList;
 import com.ssgroup.zelu.pojo.Result;
 import com.ssgroup.zelu.pojo.type.Role;
-import com.ssgroup.zelu.pojo.School;
+import com.ssgroup.zelu.pojo.department.School;
 import com.ssgroup.zelu.pojo.user.User;
 import com.ssgroup.zelu.service.ManagerService;
 import com.ssgroup.zelu.service.UserService;
@@ -60,8 +60,8 @@ public class ManagerController {
      */
     @GetMapping("/info/schools")
     public Result<PageList<School>> getSchools(@RequestParam(required = false, defaultValue = "normal") String type,
-                                      @RequestParam(required = false, defaultValue = "1") int page,
-                                      @RequestParam(required = false, defaultValue = "10") int size) {
+                                               @RequestParam(required = false, defaultValue = "1") int page,
+                                               @RequestParam(required = false, defaultValue = "10") int size) {
         // 调用ManagerService的getSchools方法获取学校信息
         PageList<School> pageList = ManagerService.getSchools(page, size);
         // 如果获取到学校信息，则返回成功结果，否则返回查询失败结果
@@ -127,7 +127,7 @@ public class ManagerController {
      *   - failure: 修改失败
      */
     @PostMapping("/user/update")
-    public Result<String> update(User user,@RequestBody User userData) {
+    public Result<String> update(@RequestUser User user,@RequestBody User userData) {
         try {
             ManagerService.updateUser(userData);
             log.info(user.getNickname());

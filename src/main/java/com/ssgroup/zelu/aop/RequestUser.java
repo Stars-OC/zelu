@@ -12,5 +12,4 @@ import java.lang.annotation.Target;
 @Target({ElementType.PARAMETER})
 public @interface RequestUser {
     String value() default "token";
-    boolean required() default true;
 }

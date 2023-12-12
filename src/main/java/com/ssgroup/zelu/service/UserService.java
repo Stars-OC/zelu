@@ -13,6 +13,7 @@ import com.ssgroup.zelu.utils.JwtUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
@@ -63,6 +64,7 @@ public class UserService {
 
     /**
      * 获取用户信息
+     *
      * @param token 用户的token
      * @return 返回包含成功标志和用户信息的结果对象
      */
@@ -76,18 +78,10 @@ public class UserService {
      * 更新用户信息
      *
      * @param user    要更新的用户对象
-     * @param token   当前用户的token
      * @return 更新结果及更新后的用户对象
      */
-    public String uploadInfo(User user, String token) {
+    public String uploadInfo(User user) {
 
-        User oldUser = new User(token);
-        // 设置更新后的用户名为原用户的用户名
-        user.setUsername(oldUser.getUsername());
-        // 设置更新后的用户角色为原用户的用户角色
-        user.setRole(oldUser.getRole());
-        // 设置更新后的用户创建时间为原用户的用户创建时间
-        user.setCreateAt(oldUser.getCreateAt());
         // 对更新后的用户密码进行加密
         user.setPassword(AesUtil.encrypt(user.getPassword()));
         // 更新用户信息至数据库
@@ -127,6 +121,7 @@ public class UserService {
      * @return 上传结果及新的token
      * @throws IOException 文件读取或上传过程中发生IO异常
      */
+    @Transactional
     public String uploadAvatarByLocal(MultipartFile file, String token) throws IOException {
         // 通过Local写法进行文件上传
         // 获取用户名
@@ -157,6 +152,7 @@ public class UserService {
 
     /**
      * 获取头像数据
+     *
      * @param avatar 头像路径
      * @return 头像数据的字节数组
      * @throws IOException 输入输出异常
@@ -182,7 +178,8 @@ public class UserService {
 
 
     /**
-     * 上传头像
+     * 本地上传头像
+     *
      * @param multipartFile 多部分文件（包含头像文件）
      * @param username 用户名
      * @return 上传后的头像URL

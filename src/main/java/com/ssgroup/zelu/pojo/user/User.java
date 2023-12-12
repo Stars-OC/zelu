@@ -1,8 +1,6 @@
 package com.ssgroup.zelu.pojo.user;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.annotation.*;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -20,6 +18,7 @@ import org.hibernate.validator.constraints.URL;
 public class User {
 
     @TableId(type = IdType.AUTO)
+    @TableField(updateStrategy = FieldStrategy.NEVER)
     @NotNull(message = "用户名不能为空")
     private Long username;
 
@@ -32,20 +31,16 @@ public class User {
     @URL(message = "头像地址不合法")
     private String avatarUrl;
 
-    private int role;
+    @TableField(updateStrategy = FieldStrategy.NEVER)
+    private Integer role;
 
     @JsonIgnore
-    private int registerWay;
+    @TableField(updateStrategy = FieldStrategy.NEVER)
+    private Integer registerWay;
 
-//    public void setRegisterWay(LoginWay loginWay) {
-//        this.registerWay = loginWay.getCode();
-//    }
-
-    /**
-     * 创建时间建议手动创建或者有参构造
-     */
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private long createAt;
+    @TableField(updateStrategy = FieldStrategy.NEVER)
+    private Long createAt;
 
     @JsonIgnore
     public String getPassword() {
@@ -56,16 +51,6 @@ public class User {
         this.password = password;
     }
 
-    public User(Long username, String nickname, String password, String avatarUrl, int role, int registerWay) {
-        this.username = username;
-        this.nickname = nickname;
-        this.password = password;
-        this.avatarUrl = avatarUrl;
-        this.role = role;
-        this.createAt = System.currentTimeMillis() / 1000;
-    }
-
-
     public User(String token){
         Claims claims = JwtUtil.getClaims(token);
         this.username = claims.get("username", Long.class);
@@ -73,14 +58,5 @@ public class User {
         this.avatarUrl = claims.get("avatarUrl", String.class);
         this.createAt = claims.get("createAt", Long.class);
         this.role = claims.get("role", Integer.class);
-    }
-    public User(Long username, String nickname, String password, String avatarUrl, int role, int registerWay, long createAt) {
-        this.username = username;
-        this.nickname = nickname;
-        this.password = password;
-        this.avatarUrl = avatarUrl;
-        this.role = role;
-        this.registerWay = registerWay;
-        this.createAt = createAt;
     }
 }

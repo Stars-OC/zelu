@@ -116,19 +116,6 @@ public class PermissionAspect {
     }
 
 
-//    @Around("annotationPointCut()")
-//    public Object checkPermission(ProceedingJoinPoint point) throws Throwable {
-//
-//        //先判断类上是否有注解
-//        Permission annotation = point.getTarget().getClass().getAnnotation(Permission.class);
-//        if (annotation == null) {
-//            MethodSignature signature = (MethodSignature) point.getSignature();
-//            Method method = signature.getMethod();
-//            annotation = method.getAnnotation(Permission.class);
-//        }
-//
-//    }
-
     /**
      * 获取Method对象
      *

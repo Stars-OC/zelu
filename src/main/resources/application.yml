@@ -21,6 +21,9 @@ mybatis-plus:
     log-impl: org.apache.ibatis.logging.log4j2.Log4j2Impl
     map-underscore-to-camel-case: on
   mapper-locations: classpath:mappers/*.xml
+  global-config:
+    db-config:
+      update-strategy: not_empty
 
 wechat:
   # 微信小程序
