@@ -10,8 +10,8 @@ public interface WechatUserMapper extends BaseMapper<WechatUser> {
 
     /**
      * 通过openId获取用户
-     * @param openid
-     * @return
+     * @param openid 微信openId
+     * @return User 用户对象
      */
     User getUserByOpenid(String openid);
 

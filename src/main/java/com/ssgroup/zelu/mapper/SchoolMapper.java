@@ -7,6 +7,12 @@ import org.apache.ibatis.annotations.Update;
 
 @Mapper
 public interface SchoolMapper extends BaseMapper<School> {
-    @Update("update school_info set deleted = #{deleted} where school_id = #{schoolId}")
-    void updateDeleted(long schoolId,int deleted);
+    /**
+     * 更新学校是否删除
+     *
+     * @param id 学校id
+     * @param deleted 是否删除(0,1)
+     */
+    @Update("update school_info set deleted = #{deleted} where school_id = #{id}")
+    void updateDeleted(long id,int deleted);
 }

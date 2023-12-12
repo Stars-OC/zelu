@@ -1,4 +1,5 @@
 create database zelu character set utf8mb4;
+
 use zelu;
 set character set utf8mb4;
 
@@ -48,9 +49,7 @@ create table school_info
     school_address text     ,
     status  int          not null,
     create_at  BIGINT   not null comment '秒级',
-    deleted    tinyint(1) default 0         not null,
-    constraint fk_school_dept_id
-        foreign key (school_id) references user (dept_id)
+    deleted    tinyint(1) default 0         not null
 )AUTO_INCREMENT = 100000;
 
 create index idx_school_id on school_info (school_id);
@@ -67,9 +66,7 @@ create table course_info
     status int         not null,
     school_id    bigint      not null,
     create_at  BIGINT  not null comment '秒级',
-    deleted    tinyint(1) default 0         not null,
-    constraint fk_school_id
-        foreign key (school_id) REFERENCES school_info (school_id)
+    deleted    tinyint(1) default 0         not null
 );
 
 create index idx_course_id on course_info (course_id);
@@ -81,11 +78,7 @@ create table course_user
     course_id bigint not null,
     user_id  bigint not null,
     deleted    tinyint(1) default 0         not null,
-    primary key (course_id, user_id),
-    constraint fk_course_id
-        foreign key (course_id) references course_info (course_id),
-    constraint fk_course_user_id
-        foreign key (user_id) references user (username)
+    primary key (course_id, user_id)
 );
 
 create index idx_course_user on course_user (course_id, user_id);
@@ -101,9 +94,7 @@ create table company_info
     company_address text    ,
     create_at  BIGINT   not null comment '秒级',
     status  int          not null,
-    deleted    tinyint(1) default 0         not null,
-    constraint fk_company_dept_id
-        foreign key (company_id) references user (dept_id)
+    deleted    tinyint(1) default 0         not null
 )AUTO_INCREMENT = 200000;
 
 create index idx_company_id on company_info (company_id);
@@ -115,11 +106,7 @@ create table company_user
     company_id bigint not null,
     user_id    bigint not null,
     deleted    tinyint(1) default 0         not null,
-    primary key (company_id, user_id),
-    constraint fk_company_id
-        foreign key (company_id) references company_info (company_id),
-    constraint fk_company_user_id
-        foreign key (user_id) references user (username)
+    primary key (company_id, user_id)
 );
 
 create index idx_company_user on company_user (company_id, user_id);
