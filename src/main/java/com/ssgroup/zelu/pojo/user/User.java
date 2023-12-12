@@ -32,6 +32,9 @@ public class User {
     private String avatarUrl;
 
     @TableField(updateStrategy = FieldStrategy.NEVER)
+    private Long deptId;
+
+    @TableField(updateStrategy = FieldStrategy.NEVER)
     private Integer role;
 
     @JsonIgnore
@@ -41,6 +44,9 @@ public class User {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @TableField(updateStrategy = FieldStrategy.NEVER)
     private Long createAt;
+
+    @TableField(updateStrategy = FieldStrategy.NEVER)
+    private Integer deleted;
 
     @JsonIgnore
     public String getPassword() {

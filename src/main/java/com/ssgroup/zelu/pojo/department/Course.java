@@ -5,17 +5,17 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
 @Data
-@TableName("class_info")
-public class ClassInfo {
+@TableName("course_info")
+public class Course {
     @TableId(type = IdType.AUTO)
     @TableField(updateStrategy = FieldStrategy.NEVER)
-    private String classId;
+    private String courseId;
 
-    private String className;
+    private String courseName;
 
-    private String classAvatar;
+    private String courseAvatar;
 
-    private String classDesc;
+    private String courseDesc;
 
     private Integer status;
 

@@ -177,7 +177,7 @@ public class AuthService {
 
             user.setPassword(AesUtil.encrypt(user.getPassword()));
             user.setRegisterWay(LoginWay.NORMAL_LOGIN.getCode());
-            user.setCreateAt(System.currentTimeMillis()/1000);
+            user.setCreateAt(System.currentTimeMillis());
 
             userMapper.insert(user);
 

@@ -1,4 +1,4 @@
-package com.ssgroup.zelu.aop.permission;
+package com.ssgroup.zelu.annotation;
 
 import com.ssgroup.zelu.pojo.type.Role;
 

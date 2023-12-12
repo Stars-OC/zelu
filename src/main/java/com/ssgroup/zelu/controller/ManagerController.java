@@ -1,7 +1,8 @@
 package com.ssgroup.zelu.controller;
 
-import com.ssgroup.zelu.aop.RequestUser;
-import com.ssgroup.zelu.aop.permission.Permission;
+import com.ssgroup.zelu.annotation.RequestPage;
+import com.ssgroup.zelu.annotation.RequestUser;
+import com.ssgroup.zelu.annotation.Permission;
 import com.ssgroup.zelu.pojo.PageList;
 import com.ssgroup.zelu.pojo.Result;
 import com.ssgroup.zelu.pojo.type.Role;
@@ -34,16 +35,14 @@ public class ManagerController {
      * 获取用户信息
      *
      * @param type 筛选类型（默认为"normal"）
-     * @param page 页码（默认为1）
-     * @param size 每页数量（默认为10）
+     * @param page 分页数组，默认为page[0]page页 = 1 page[1]limit数量 = 10
      * @return 结果对象，包含用户信息和查询结果状态
      */
     @GetMapping("/info/users")
     public Result<PageList<User>> getUsers(@RequestParam(required = false, defaultValue = "normal") String type,
-                                      @RequestParam(required = false, defaultValue = "1") int page,
-                                      @RequestParam(required = false, defaultValue = "10") int size) {
+                                           @RequestPage(limit = 5) int[] page) {
         // 调用ManagerService的getUsers方法获取用户列表
-        PageList<User> pageList = ManagerService.getUsers(page, size);
+        PageList<User> pageList = ManagerService.getUsers(page[0], page[1]);
         // 如果页面列表不为空，返回查询成功的结果对象，否则返回查询失败的结果对象
         return pageList != null?
                 Result.success(pageList) : Result.failure("查询失败");
@@ -54,16 +53,14 @@ public class ManagerController {
      * 获取学校信息
      *
      * @param type 查询类型，可选值为"normal"（默认值）和"all"，表示是否包括已关闭的学校，默认为"normal"
-     * @param page 分页页码，默认为1
-     * @param size 每页显示的学校数量，默认为10
+     * @param page 分页数组，默认为page[0]page页 = 1 page[1]limit数量 = 10
      * @return 结果对象，包含学校信息和分页信息
      */
     @GetMapping("/info/schools")
     public Result<PageList<School>> getSchools(@RequestParam(required = false, defaultValue = "normal") String type,
-                                               @RequestParam(required = false, defaultValue = "1") int page,
-                                               @RequestParam(required = false, defaultValue = "10") int size) {
+                                               @RequestPage() int[] page) {
         // 调用ManagerService的getSchools方法获取学校信息
-        PageList<School> pageList = ManagerService.getSchools(page, size);
+        PageList<School> pageList = ManagerService.getSchools(page[0], page[1]);
         // 如果获取到学校信息，则返回成功结果，否则返回查询失败结果
         return pageList != null ?
                 Result.success(pageList) :

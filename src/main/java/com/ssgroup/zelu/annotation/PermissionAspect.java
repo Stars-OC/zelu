@@ -1,5 +1,6 @@
-package com.ssgroup.zelu.aop.permission;
+package com.ssgroup.zelu.annotation;
 
+import com.ssgroup.zelu.annotation.Permission;
 import com.ssgroup.zelu.pojo.Result;
 import com.ssgroup.zelu.pojo.type.ResultCode;
 import com.ssgroup.zelu.pojo.type.Role;
@@ -30,14 +31,14 @@ public class PermissionAspect {
     /**
      * 方法注解切面
      */
-    @Pointcut("@annotation(com.ssgroup.zelu.aop.permission.Permission)")
+    @Pointcut("@annotation(com.ssgroup.zelu.annotation.Permission)")
     private void annotationPointCut() {
     }
 
     /**
      * 类注解切面
      */
-    @Pointcut("@within(Permission)")
+    @Pointcut("@within(com.ssgroup.zelu.annotation.Permission)")
     private void withinPointCut() {
     }
 

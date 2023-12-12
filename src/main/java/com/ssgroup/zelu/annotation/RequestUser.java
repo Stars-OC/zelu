@@ -1,4 +1,4 @@
-package com.ssgroup.zelu.aop;
+package com.ssgroup.zelu.annotation;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

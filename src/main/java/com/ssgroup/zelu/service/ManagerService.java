@@ -20,8 +20,8 @@ public class ManagerService {
     @Autowired
     private SchoolMapper schoolMapper;
 
-    public PageList<User> getUsers(int page, int size) {
-        Page<User> userPage = new Page<>(page,size);
+    public PageList<User> getUsers(int page, int limit) {
+        Page<User> userPage = new Page<>(page,limit);
 
         Page<User> selectPage = userMapper.selectPage(userPage, null);
         return new PageList<>(selectPage);
@@ -56,8 +56,8 @@ public class ManagerService {
         return schoolMapper.deleteBatchIds(Arrays.stream(schools).toList());
     }
 
-    public PageList<School> getSchools(int page, int size) {
-        Page<School> userPage = new Page<>(page,size);
+    public PageList<School> getSchools(int page, int limit) {
+        Page<School> userPage = new Page<>(page,limit);
 
         Page<School> selectPage = schoolMapper.selectPage(userPage, null);
         return new PageList<>(selectPage);
