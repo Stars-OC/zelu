@@ -22,15 +22,16 @@ create index idx_username on user (username);
 create index idx_time on user (create_at);
 create index idx_dept_id on user (dept_id);
 
-# 微信用户
+# 微信用户 TODO 将这个与user链接
 create table wechat_user
 (
-    username    bigint auto_increment
-        primary key,
-    openid      varchar(60) not null,
+    username    bigint not null,
+    openid      varchar(60) not null primary key,
     unionid     varchar(50) ,
     constraint openid
-        unique (openid)
+        unique (openid),
+    constraint fk_username
+        foreign key (username) REFERENCES user (username)
 )AUTO_INCREMENT = 100000000;
 
 create index idx_username on wechat_user (username);
@@ -47,7 +48,9 @@ create table school_info
     school_address text     ,
     status  int          not null,
     create_at  BIGINT   not null comment '秒级',
-    deleted    tinyint(1) default 0         not null
+    deleted    tinyint(1) default 0         not null,
+    constraint fk_school_dept_id
+        foreign key (school_id) references user (dept_id)
 )AUTO_INCREMENT = 100000;
 
 create index idx_school_id on school_info (school_id);
@@ -81,7 +84,7 @@ create table course_user
     primary key (course_id, user_id),
     constraint fk_course_id
         foreign key (course_id) references course_info (course_id),
-    constraint fk_user_id
+    constraint fk_course_user_id
         foreign key (user_id) references user (username)
 );
 
@@ -98,7 +101,9 @@ create table company_info
     company_address text    ,
     create_at  BIGINT   not null comment '秒级',
     status  int          not null,
-    deleted    tinyint(1) default 0         not null
+    deleted    tinyint(1) default 0         not null,
+    constraint fk_company_dept_id
+        foreign key (company_id) references user (dept_id)
 )AUTO_INCREMENT = 200000;
 
 create index idx_company_id on company_info (company_id);
@@ -108,13 +113,13 @@ create index idx_time on company_info (create_at);
 create table company_user
 (
     company_id bigint not null,
-    username_id    bigint not null,
+    user_id    bigint not null,
     deleted    tinyint(1) default 0         not null,
-    primary key (company_id, username_id),
+    primary key (company_id, user_id),
     constraint fk_company_id
         foreign key (company_id) references company_info (company_id),
-    constraint fk_username_id
-        foreign key (username_id) references user (username)
+    constraint fk_company_user_id
+        foreign key (user_id) references user (username)
 );
 
-create index idx_company_user on company_user (company_id, username_id);
+create index idx_company_user on company_user (company_id, user_id);
