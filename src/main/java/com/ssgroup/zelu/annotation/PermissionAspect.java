@@ -27,6 +27,7 @@ import java.util.stream.Collectors;
 @Component
 @Order(1)
 public class PermissionAspect {
+    //先用AOP实现，其他有时间再看看能不能直接用原生实现
 
     /**
      * 方法注解切面

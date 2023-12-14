@@ -18,7 +18,6 @@ import org.hibernate.validator.constraints.URL;
 public class User {
 
     @TableId(type = IdType.AUTO)
-    @TableField(updateStrategy = FieldStrategy.NEVER)
     @NotNull(message = "用户名不能为空")
     private Long username;
 
@@ -27,6 +26,9 @@ public class User {
 
     @NotEmpty(message = "密码不能为空")
     private String password;
+
+    @TableField(exist = false)
+    private String newPassword;
 
     @URL(message = "头像地址不合法")
     private String avatarUrl;
@@ -52,9 +54,20 @@ public class User {
     public String getPassword() {
         return password;
     }
+
     @JsonProperty
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    @JsonIgnore
+    public String getNewPassword() {
+        return newPassword;
+    }
+
+    @JsonProperty
+    public void setNewPassword(String newPassword) {
+        this.newPassword = newPassword;
     }
 
     public User(String token){

@@ -80,10 +80,18 @@ public class UserService {
      * @param user    要更新的用户对象
      * @return 更新结果及更新后的用户对象
      */
-    public String uploadInfo(User user) {
+    public String updateInfo(User user) {
+        if (user.getNewPassword() != null){
+            User oldUser = findUsername(user.getUsername());
+            String newPassword = AesUtil.encrypt(user.getNewPassword());
+            if (newPassword == oldUser.getPassword()) {
+                // 对更新后的用户密码进行加密
+                user.setPassword(newPassword);
+            }else {
+                return null;
+            }
+        }
 
-        // 对更新后的用户密码进行加密
-        user.setPassword(AesUtil.encrypt(user.getPassword()));
         // 更新用户信息至数据库
         userMapper.updateById(user);
         String jwt = jwtService.createJwt(user);

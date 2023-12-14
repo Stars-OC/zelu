@@ -3,6 +3,7 @@ package com.ssgroup.zelu.controller;
 import com.ssgroup.zelu.annotation.RequestPage;
 import com.ssgroup.zelu.annotation.RequestUser;
 import com.ssgroup.zelu.annotation.Permission;
+import com.ssgroup.zelu.config.PermissionConfig;
 import com.ssgroup.zelu.pojo.PageList;
 import com.ssgroup.zelu.pojo.Result;
 import com.ssgroup.zelu.pojo.type.Role;
@@ -20,7 +21,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("admin/api/manager")
 @Validated
-@Permission(value = Role.ADMIN)
+@Permission(Role.ADMIN)
 @Slf4j
 public class ManagerController {
 
@@ -29,7 +30,6 @@ public class ManagerController {
 
     @Autowired
     private UserService userService;
-
 
     /**
      * 获取用户信息

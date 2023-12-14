@@ -9,7 +9,7 @@ import lombok.Data;
 @Data
 @TableName("wechat_user")
 public class WechatUser {
-    @TableId(type = IdType.AUTO)
+    @TableId
     private Long username;
     /**
      * 微信openid

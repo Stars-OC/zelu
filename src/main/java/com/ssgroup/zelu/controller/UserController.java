@@ -1,5 +1,6 @@
 package com.ssgroup.zelu.controller;
 
+import com.ssgroup.zelu.annotation.RequestUser;
 import com.ssgroup.zelu.pojo.Result;
 import com.ssgroup.zelu.pojo.user.User;
 import com.ssgroup.zelu.service.auth.JwtService;
@@ -49,8 +50,9 @@ public class UserController {
      */
     @GetMapping("/info")
     public Result<User> userInfo(@RequestHeader String token){
-        return userService.getUserInfo(token) != null?
-                Result.success("获取用户信息成功",userService.getUserInfo(token)) :
+        User userInfo = userService.getUserInfo(token);
+        return userInfo != null?
+                Result.success("获取用户信息成功", userInfo) :
                 Result.failure("获取用户信息失败");
     }
 
@@ -61,13 +63,13 @@ public class UserController {
      * @param user 用户信息
      * @return 结果对象
      */
-    @PostMapping("/upload/info")
-    public Result<String> uploadInfo(@RequestBody @Validated User user){
+    @PostMapping("/update/info")
+    public Result<String> updateInfo(@RequestBody @Validated User user){
 
-        String jwt = userService.uploadInfo(user);
+        String jwt = userService.updateInfo(user);
         return jwt != null?
                 Result.success("上传用户信息成功",jwt) :
-                Result.failure("上传用户信息失败");
+                Result.failure("上传用户信息失败 密码错误请重试");
     }
 
 

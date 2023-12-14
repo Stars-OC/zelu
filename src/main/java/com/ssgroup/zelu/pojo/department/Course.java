@@ -8,7 +8,6 @@ import lombok.Data;
 @TableName("course_info")
 public class Course {
     @TableId(type = IdType.AUTO)
-    @TableField(updateStrategy = FieldStrategy.NEVER)
     private String courseId;
 
     private String courseName;
