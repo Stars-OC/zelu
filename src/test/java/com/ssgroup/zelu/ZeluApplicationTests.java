@@ -2,7 +2,9 @@ package com.ssgroup.zelu;
 
 import com.ssgroup.zelu.annotation.Permission;
 import com.ssgroup.zelu.pojo.department.Course;
+import com.ssgroup.zelu.pojo.department.School;
 import com.ssgroup.zelu.service.UserService;
+import com.ssgroup.zelu.service.manager.SchoolManagerService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -19,11 +21,17 @@ class ZeluApplicationTests {
 	@Autowired
 	private UserService userService;
 
+	@Autowired
+	private SchoolManagerService schoolManagerService;
+
 	@Test
 	void contextLoads() throws FileNotFoundException {
-		Course classInfo = new Course();
-		Permission annotation = userService.getClass().getAnnotation(Permission.class);
-		System.out.println(annotation.value());
+
+
+		School school = new School();
+		school.setSchoolName("test");
+		school.setPhone("123456");
+		schoolManagerService.addByAdmin(school);
 	}
 
 

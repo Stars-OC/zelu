@@ -4,9 +4,11 @@ package com.ssgroup.zelu.pojo.department;
 import com.baomidou.mybatisplus.annotation.*;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
-@TableName("company_info")
+@TableName("company")
+@NoArgsConstructor
 public class Company {
     @TableId(type = IdType.AUTO)
     private String companyId;
@@ -20,10 +22,11 @@ public class Company {
     private String companyAddress;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    @TableField(updateStrategy = FieldStrategy.NEVER)
+    @TableField(fill = FieldFill.INSERT,updateStrategy = FieldStrategy.NEVER)
     private Long createdBy;
 
-    private Integer deleted;
+    private String phone;
 
     private Integer status;
+
 }

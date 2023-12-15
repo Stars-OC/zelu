@@ -14,6 +14,6 @@ public interface CourseMapper extends BaseMapper<Course> {
      * @param id 课程id
      * @param deleted 是否删除(0,1)
      */
-    @Update("update course_info set deleted = #{deleted} where course_info = #{id}")
+    @Update("update course set deleted = #{deleted} where course_info = #{id}")
     void updateDeleted(long id,int deleted);
 }

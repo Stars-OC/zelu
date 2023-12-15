@@ -25,6 +25,7 @@ public class User {
     private String nickname;
 
     @NotEmpty(message = "密码不能为空")
+    @TableField(fill = FieldFill.INSERT)
     private String password;
 
     @TableField(exist = false)
@@ -37,6 +38,9 @@ public class User {
     private Long deptId;
 
     @TableField(updateStrategy = FieldStrategy.NEVER)
+    private Integer deptType;
+
+    @TableField(updateStrategy = FieldStrategy.NEVER)
     private Integer role;
 
     @JsonIgnore
@@ -44,11 +48,8 @@ public class User {
     private Integer registerWay;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    @TableField(updateStrategy = FieldStrategy.NEVER)
+    @TableField(fill = FieldFill.INSERT,updateStrategy = FieldStrategy.NEVER)
     private Long createAt;
-
-    @TableField(updateStrategy = FieldStrategy.NEVER)
-    private Integer deleted;
 
     @JsonIgnore
     public String getPassword() {
@@ -77,5 +78,7 @@ public class User {
         this.avatarUrl = claims.get("avatarUrl", String.class);
         this.createAt = claims.get("createAt", Long.class);
         this.role = claims.get("role", Integer.class);
+        this.deptId = claims.get("deptId", Long.class);
+        this.deptType = claims.get("deptType", Integer.class);
     }
 }

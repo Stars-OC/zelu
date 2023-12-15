@@ -13,6 +13,6 @@ public interface SchoolMapper extends BaseMapper<School> {
      * @param id 学校id
      * @param deleted 是否删除(0,1)
      */
-    @Update("update school_info set deleted = #{deleted} where school_id = #{id}")
+    @Update("update school set deleted = #{deleted} where school_id = #{id}")
     void updateDeleted(long id,int deleted);
 }

@@ -46,7 +46,6 @@ public class RequestPageResolver implements HandlerMethodArgumentResolver {
 
 
     private int judge(String param,int annotation){
-        if (StringUtils.isEmpty(param)) return annotation;
-        return  Integer.parseInt(param);
+        return StringUtils.isEmpty(param)? annotation : Integer.parseInt(param);
     }
 }

@@ -32,7 +32,8 @@ public class LoginController {
     @PostMapping("/login")
     public Result<String> login(@Validated @RequestBody UsernameAndPWD usernameAndPWD){
 
-        return authService.login(usernameAndPWD);
+        String jwt = authService.login(usernameAndPWD);
+        return jwt != null? Result.success("登录成功",jwt) : Result.failure("账号密码错误");
 
     }
 
@@ -44,7 +45,10 @@ public class LoginController {
     @GetMapping("/login/wechat")
     public Result<String> loginWechat(@RequestParam String code){
 
-        return authService.loginWechat(code);
+        String jwt = authService.loginWechat(code);
+        return jwt != null?
+                Result.success("登录成功",jwt):
+                Result.failure("登录失败");
 
     }
 

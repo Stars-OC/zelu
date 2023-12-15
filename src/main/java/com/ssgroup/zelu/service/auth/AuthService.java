@@ -109,7 +109,7 @@ public class AuthService {
      * @param usernameAndPWD 用户名和密码
      * @return 登录成功返回JWT，登录失败返回"账号密码错误"
      */
-    public Result<String> login(UsernameAndPWD usernameAndPWD){
+    public String login(UsernameAndPWD usernameAndPWD){
 
         Long username = usernameAndPWD.getUsername();
         // 根据用户名查找用户
@@ -126,7 +126,7 @@ public class AuthService {
 
                 log.info("用户 {} 登录成功", username);
 
-                return Result.success("登录成功",jwt);
+                return jwt;
             }
         }catch (NullPointerException e){
 
@@ -134,7 +134,7 @@ public class AuthService {
         }
 
         // 密码不匹配或用户不存在，返回"账号密码错误"
-        return Result.failure("账号密码错误");
+        return null;
     }
 
 
@@ -171,9 +171,7 @@ public class AuthService {
         Long username = user.getUsername();
         if (findUsername(username) == null){
 
-            user.setPassword(AesUtil.encrypt(user.getPassword()));
             user.setRegisterWay(LoginWay.NORMAL_LOGIN.getCode());
-            user.setCreateAt(System.currentTimeMillis());
 
             userMapper.insert(user);
 
@@ -191,17 +189,17 @@ public class AuthService {
      * @param code 授权码
      * @return 登录结果
      */
-    public Result<String> loginWechat(String code) {
+    public String loginWechat(String code) {
         // 调用服务端的微信登录方法，传入授权码，返回用户信息
         User user = loginWechatByCode(code);
         // 如果用户为空，返回登录失败结果
         if (user == null){
-            return Result.failure("登录失败 请重试");
+            return null;
         }
         // 利用用户信息生成JWT token
         String jwt = jwtService.createJwt(user);
         // 返回登录成功结果，包含JWT token
-        return Result.success("授权成功",jwt);
+        return jwt;
     }
 
 

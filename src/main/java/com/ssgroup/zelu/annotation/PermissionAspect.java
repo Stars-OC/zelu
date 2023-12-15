@@ -28,6 +28,7 @@ import java.util.stream.Collectors;
 @Order(1)
 public class PermissionAspect {
     //先用AOP实现，其他有时间再看看能不能直接用原生实现
+    //TODO 实现学校/公司id的权限控制
 
     /**
      * 方法注解切面
@@ -45,7 +46,7 @@ public class PermissionAspect {
 
 
     /**
-     * 检查权限切面方法
+     * 只有方法有注解执行
      *
      * @param point 函数调用的 ProceedingJoinPoint 对象
      * @return 方法的返回值
@@ -61,7 +62,7 @@ public class PermissionAspect {
     }
 
     /**
-     * 在指定的切点范围内执行环绕通知，并且不包含注解切点的情况下的处理方法
+     * 只有类有注解 执行
      *
      * @param point ProceedingJoinPoint对象，表示当前的方法调用点
      * @return 返回方法的执行结果
@@ -77,7 +78,7 @@ public class PermissionAspect {
 
 
     /**
-     * 判断是否具有执行当前方法的权限
+     * 类和方法都有注解执行
      *
      * @param point 执行的JoinPoint对象
      * @return 切面方法的返回值
@@ -143,8 +144,13 @@ public class PermissionAspect {
         Method method = getMethod(point);
         // 获取方法上的Permission注解
         Permission annotation = method.getAnnotation(Permission.class);
+        Role[] value = annotation.value();
+        if (annotation.isAllowAdmin()){
+            //若没有定义管理员不能访问，就添加管理员
+            value = addRole(value,Role.ADMIN);
+        }
         // 返回Permission注解的value属性值
-        return annotation.value();
+        return value;
     }
 
 
@@ -157,8 +163,13 @@ public class PermissionAspect {
     private Role[] getClassValues(ProceedingJoinPoint point) {
         // 获取 point 所属类的 Permission 注解
         Permission annotation = point.getTarget().getClass().getAnnotation(Permission.class);
+        Role[] value = annotation.value();
+        if (annotation.isAllowAdmin()){
+            //若没有定义管理员不能访问，就添加管理员
+            value = addRole(value,Role.ADMIN);
+        }
         // 返回 Permission 注解的 value 数组
-        return annotation.value();
+        return value;
     }
 
     /**
@@ -187,5 +198,26 @@ public class PermissionAspect {
         }
         return false;
     }
+
+
+    /**
+     * 向角色数组中添加角色
+     *
+     * @param roles 角色数组
+     * @param role 待添加的角色
+     *
+     * @return 添加角色后的角色数组
+     */
+    private Role[] addRole(Role[] roles, Role role) {
+        // 创建一个新的角色数组，长度为原数组长度加1
+        Role[] newRole = new Role[roles.length + 1];
+        // 将原角色数组复制到新数组中
+        System.arraycopy(roles, 0, newRole, 0, roles.length);
+        // 将待添加的角色放入新数组的最后一个位置
+        newRole[roles.length - 1] = role;
+        // 将新数组赋值给原数组，实现角色的添加
+        return newRole;
+    }
+
 
 }

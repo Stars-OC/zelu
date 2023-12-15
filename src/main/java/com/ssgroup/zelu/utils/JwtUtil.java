@@ -54,6 +54,8 @@ public class JwtUtil {
                 .claim("role", user.getRole())
                 // 添加注册时间声明
                 .claim("createAt",user.getCreateAt())
+                .claim("deptId",user.getDeptId())
+                .claim("deptType",user.getDeptType())
                 // 使用SECRET作为签名密钥
                 .signWith(stringToSecretKey(SECRET))
                 .compact(); // 缩小JWTToken长度
@@ -132,5 +134,30 @@ public class JwtUtil {
         return new String(Base64.getDecoder().decode(base64));
     }
 
+    public static Long getDeptId(String jwt) {
+
+        String payload = getPayload(jwt);
+
+        try {
+            JsonNode node = mapper.readTree(payload);
+            return node.get("deptId").longValue();
+        } catch (JacksonException e) {
+            log.error("获取deptId失败从 token: {}",jwt);
+            return null;
+        }
+    }
+
+    public static Integer getDeptType(String jwt) {
+
+        String payload = getPayload(jwt);
+
+        try {
+            JsonNode node = mapper.readTree(payload);
+            return node.get("deptType").intValue();
+        } catch (JacksonException e) {
+            log.error("获取deptType失败从 token: {}",jwt);
+            return null;
+        }
+    }
 
 }

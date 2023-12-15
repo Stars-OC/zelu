@@ -1,4 +1,4 @@
-package com.ssgroup.zelu.service;
+package com.ssgroup.zelu.service.manager;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.ssgroup.zelu.mapper.SchoolMapper;
@@ -12,13 +12,12 @@ import org.springframework.stereotype.Service;
 import java.util.Arrays;
 
 @Service
-public class ManagerService {
+public class UserManagerService {
 
     @Autowired
     private UserMapper userMapper;
 
-    @Autowired
-    private SchoolMapper schoolMapper;
+
 
     public PageList<User> getUsers(int page, int limit) {
         Page<User> userPage = new Page<>(page,limit);
@@ -41,25 +40,7 @@ public class ManagerService {
     }
 
 
-    /** School 相关的CRUD **/
-
-
-    public void addSchool(School school) {
-        schoolMapper.insert(school);
-    }
-
-    public void updateSchool(School schoolData) {
-        schoolMapper.updateById(schoolData);
-    }
-
-    public int deleteSchools(Long[] schools) {
-        return schoolMapper.deleteBatchIds(Arrays.stream(schools).toList());
-    }
-
-    public PageList<School> getSchools(int page, int limit) {
-        Page<School> userPage = new Page<>(page,limit);
-
-        Page<School> selectPage = schoolMapper.selectPage(userPage, null);
-        return new PageList<>(selectPage);
+    public void addUserByAdmin(User user) {
+        userMapper.insert(user);
     }
 }

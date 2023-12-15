@@ -63,11 +63,12 @@ public class UserService {
 
 
     /**
-     * 获取用户信息
+     * @deprecated 获取用户信息 (前端可以直接取playload中的用户信息)
      *
      * @param token 用户的token
      * @return 返回包含成功标志和用户信息的结果对象
      */
+    @Deprecated
     public User getUserInfo(String token) {
 
         return new User(token);
@@ -84,7 +85,7 @@ public class UserService {
         if (user.getNewPassword() != null){
             User oldUser = findUsername(user.getUsername());
             String newPassword = AesUtil.encrypt(user.getNewPassword());
-            if (newPassword == oldUser.getPassword()) {
+            if (oldUser.getPassword().equalsIgnoreCase(newPassword)) {
                 // 对更新后的用户密码进行加密
                 user.setPassword(newPassword);
             }else {

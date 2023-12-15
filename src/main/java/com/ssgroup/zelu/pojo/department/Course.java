@@ -5,7 +5,8 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
 @Data
-@TableName("course_info")
+@TableName("course")
+
 public class Course {
     @TableId(type = IdType.AUTO)
     private String courseId;
@@ -22,8 +23,6 @@ public class Course {
     private Long schoolId;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    @TableField(updateStrategy = FieldStrategy.NEVER)
+    @TableField(fill = FieldFill.INSERT,updateStrategy = FieldStrategy.NEVER)
     private Long createAt;
-
-    private Integer deleted;
 }

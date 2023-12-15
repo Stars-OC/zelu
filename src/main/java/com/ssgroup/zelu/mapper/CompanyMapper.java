@@ -14,6 +14,6 @@ public interface CompanyMapper extends BaseMapper<Company> {
      * @param id 公司id
      * @param deleted 是否删除(0,1)
      */
-    @Update("update company_info set deleted = #{deleted} where company_id = #{id}")
+    @Update("update company set deleted = #{deleted} where company_id = #{id}")
     void updateDeleted(long id,int deleted);
 }

@@ -9,21 +9,25 @@ public enum Role {
      */
     USER(0),
     /**
-     * 学生
+     * 课堂助手(班长)
      */
-    STUDENT(1),
+    COURSE_ASSISTANT(1),
     /**
      * 教师
      */
     TEACHER(2),
     /**
-     * 部门管理员
+     * 公司管理员
      */
-    Dept_ADMIN(3),
+    COMPANY_ADMIN(3),
     /**
-     * 管理员
+     * 学校管理员
      */
-    ADMIN(4),
+    SCHOOL_ADMIN(4),
+    /**
+     * 超级管理员
+     */
+    ADMIN(5),
     ;
 
     Role(int role) {

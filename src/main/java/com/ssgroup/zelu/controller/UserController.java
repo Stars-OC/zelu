@@ -1,6 +1,5 @@
 package com.ssgroup.zelu.controller;
 
-import com.ssgroup.zelu.annotation.RequestUser;
 import com.ssgroup.zelu.pojo.Result;
 import com.ssgroup.zelu.pojo.user.User;
 import com.ssgroup.zelu.service.auth.JwtService;
@@ -42,7 +41,7 @@ public class UserController {
     }
 
     /**
-     * @deprecated 获取用户信息 (前端可以直接取playload中的用户信息)
+     * @deprecated 获取用户信息
      *
      *
      * @param token 用户的token
