@@ -28,7 +28,7 @@ import java.util.stream.Collectors;
 @Order(1)
 public class PermissionAspect {
     //先用AOP实现，其他有时间再看看能不能直接用原生实现
-    //TODO 实现学校/公司id的权限控制
+    //TODO 实现COURSE_ASSISTANT权限的检查
 
     /**
      * 方法注解切面
@@ -185,6 +185,9 @@ public class PermissionAspect {
         HttpServletRequest request = attributes.getRequest();
         // 获取请求头中的token
         String token = request.getHeader("token");
+        //利用parameter进行schoolid的认证
+//        String schoolId = request.getParameter("schoolId");
+//        System.out.println(schoolId);
 
         // 通过token获取用户的角色
         Integer role = JwtUtil.getRole(token);

@@ -38,9 +38,6 @@ public class User {
     private Long deptId;
 
     @TableField(updateStrategy = FieldStrategy.NEVER)
-    private Integer deptType;
-
-    @TableField(updateStrategy = FieldStrategy.NEVER)
     private Integer role;
 
     @JsonIgnore
@@ -79,6 +76,5 @@ public class User {
         this.createAt = claims.get("createAt", Long.class);
         this.role = claims.get("role", Integer.class);
         this.deptId = claims.get("deptId", Long.class);
-        this.deptType = claims.get("deptType", Integer.class);
     }
 }

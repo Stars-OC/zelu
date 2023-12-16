@@ -1,8 +1,9 @@
 package com.ssgroup.zelu.controller.manager.admin;
 
-import com.ssgroup.zelu.annotation.RequestUser;
+import com.ssgroup.zelu.annotation.RequestToken;
 import com.ssgroup.zelu.annotation.Permission;
 import com.ssgroup.zelu.pojo.Result;
+import com.ssgroup.zelu.pojo.department.School;
 import com.ssgroup.zelu.pojo.type.Role;
 import com.ssgroup.zelu.pojo.user.User;
 import com.ssgroup.zelu.service.manager.UserManagerService;
@@ -19,13 +20,16 @@ import org.springframework.web.bind.annotation.*;
 @Validated
 @Permission(Role.ADMIN)
 @Slf4j
-public class UserManagerController {
+public class AdminManagerController {
 
     @Autowired
     private UserManagerService userManagerService;
 
     @Autowired
     private UserService userService;
+
+//    @Autowired
+//    private InfoContrller infoContrller;
 
     /**
      * 添加用户利用User对象
@@ -86,9 +90,9 @@ public class UserManagerController {
                 Result.success("删除成功 [" + count + "/" + users.length + "]") : Result.failure("删除失败");
     }
 
-    @RequestMapping("/test")
-    public User test(@RequestUser User user){
-        return user;
+    @RequestMapping("/{test}")
+    public Object test(@RequestToken("school") School school){
+        return school;
     }
 
 }

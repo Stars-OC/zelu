@@ -10,6 +10,6 @@ import java.lang.annotation.Target;
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.PARAMETER})
-public @interface RequestUser {
-    String value() default "token";
+public @interface RequestToken {
+    String value() default "user";
 }

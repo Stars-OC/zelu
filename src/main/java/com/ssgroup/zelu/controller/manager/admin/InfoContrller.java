@@ -55,7 +55,7 @@ public class InfoContrller {
                 pageList = schoolManagerService.getSchools(page[0], page[1]);
                 break;
             case "courses":
-                pageList = courseManagerService.getCourses(page[0], page[1]);
+                pageList = courseManagerService.getAllCourses(page[0], page[1]);
                 break;
             default:
                 break;

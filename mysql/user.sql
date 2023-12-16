@@ -15,7 +15,6 @@ create table user
     create_at  bigint   not null comment '秒级',
     register_way  int        default 1 not null,
     dept_id    bigint     default 0                not null,
-    dept_type  int        default 0                not null,
     deleted    tinyint(1) default 0                not null
 )AUTO_INCREMENT = 200000000;
 
@@ -97,7 +96,7 @@ create table company
     phone varchar(20) not null,
     status  int    default 0      not null,
     deleted    tinyint(1) default 0         not null
-)AUTO_INCREMENT = 200000;
+)AUTO_INCREMENT = 500000;
 
 create index idx_company_id on company (company_id);
 create index idx_time on company (create_at);

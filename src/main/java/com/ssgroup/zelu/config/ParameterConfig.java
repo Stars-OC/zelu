@@ -1,7 +1,7 @@
 package com.ssgroup.zelu.config;
 
 import com.ssgroup.zelu.annotation.RequestPageResolver;
-import com.ssgroup.zelu.annotation.RequestUserResolver;
+import com.ssgroup.zelu.annotation.RequestTokenResolver;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
@@ -13,7 +13,7 @@ import java.util.List;
 public class ParameterConfig implements WebMvcConfigurer {
 
     @Autowired
-    private RequestUserResolver requestUserResolver;
+    private RequestTokenResolver requestUserResolver;
 
     @Override
     public void addArgumentResolvers(List<HandlerMethodArgumentResolver> argumentResolvers){

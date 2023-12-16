@@ -16,10 +16,11 @@ import org.springframework.web.bind.annotation.*;
 @Validated
 @Permission(Role.ADMIN)
 @Slf4j
-public class SchoolManagerController {
+public class ManagerController {
 
     @Autowired
     private SchoolManagerService schoolManagerService;
+
 
     /**
      * 添加学校
