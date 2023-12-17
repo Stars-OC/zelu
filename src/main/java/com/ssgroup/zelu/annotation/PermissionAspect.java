@@ -46,19 +46,99 @@ public class PermissionAspect {
 
 
     /**
+     * 定义一个私有的类点切口，
+     * 用于在具有特定注解但不在特定类中的类上应用。
+     */
+    @Pointcut("withinPointCut() &&!annotationPointCut()")
+    private void classPointCut() {
+
+    }
+
+
+    /**
+     * 用于在具有特定注解但不在特定类中的方法上应用。
+     */
+    @Pointcut("!withinPointCut() && annotationPointCut()")
+    private void methodPointCut() {
+    }
+
+
+    /**
+     * 定义一个私有的注解点切口，用于在类和方法上应用。
+     */
+    @Pointcut("withinPointCut() && annotationPointCut()")
+    private void classAndMethodPointCut() {
+    }
+
+
+    /**
+     * 在类和方法的切点 around 定义权限检查的切面方法，
+     * 对满足条件的类和方法进行权限检查，
+     * 如果权限检查通过，则执行被切掉的方法，
+     * 否则返回权限失败的结果。
+     *
+     * @param point 方法连接点
+     * @param schoolId 学校ID
+     * @return 方法执行结果或者权限失败的结果
+     * @throws Throwable 异常
+     */
+    @Around("classAndMethodPointCut() && args(schoolId,..)")
+    public Object classAndMethodArgsCheck(ProceedingJoinPoint point, long schoolId) throws Throwable {
+        Role[] value = getClassAndMethodValue(point);
+        // 没有权限，返回权限失败的结果
+        return (checkPermission(value, schoolId)) ? point.proceed() : Result.codeFailure(ResultCode.ACCESS_DENIED);
+    }
+
+
+    /**
+     * 对方法执行前进行权限检查，
+     * 如果方法权限为空或者方法参数schoolId的值不在方法权限范围内，则返回权限失败的结果。
+     *
+     * @param point 方法连接点
+     * @param schoolId 学校ID
+     * @return 方法执行结果或者权限失败的结果
+     * @throws Throwable 异常
+     */
+    @Around("methodPointCut() && args(schoolId,..)")
+    public Object methodArgsCheck(ProceedingJoinPoint point, long schoolId) throws Throwable {
+        Role[] value = getMethodValues(point);
+        // 没有权限，返回权限失败的结果
+        return (checkPermission(value, schoolId)) ? point.proceed() : Result.codeFailure(ResultCode.ACCESS_DENIED);
+    }
+
+
+    /**
+     * 对方法执行前进行权限检查，
+     * 如果方法所属的类权限为空或者方法参数schoolId的值不在方法权限范围内，则返回权限失败的结果。
+     * @param point 方法连接点
+     * @param schoolId 学校ID
+     * @return 方法执行结果或者权限失败的结果
+     * @throws Throwable 异常
+     */
+    @Around("classPointCut() && args(schoolId,..)")
+    public Object classArgsCheck(ProceedingJoinPoint point, long schoolId) throws Throwable {
+        Role[] value = getClassValues(point);
+        // 没有权限，返回权限失败的结果
+        return (checkPermission(value, schoolId)) ? point.proceed() : Result.codeFailure(ResultCode.ACCESS_DENIED);
+    }
+
+
+    /**
      * 只有方法有注解执行
      *
      * @param point 函数调用的 ProceedingJoinPoint 对象
      * @return 方法的返回值
      * @throws Throwable 异常信息
      */
-    @Around("annotationPointCut() && !withinPointCut()")
+    @Around("methodPointCut()")
     public Object methodCheck(ProceedingJoinPoint point) throws Throwable{
 
+
         Role[] value = getMethodValues(point);
+        String token = getToken();
 
         // 没有权限，返回权限失败的结果
-        return (checkPermission(value))? point.proceed() : Result.codeFailure(ResultCode.ACCESS_DENIED);
+        return (checkPermission(value,token))? point.proceed() : Result.codeFailure(ResultCode.ACCESS_DENIED);
     }
 
     /**
@@ -68,12 +148,13 @@ public class PermissionAspect {
      * @return 返回方法的执行结果
      * @throws Throwable 异常信息
      */
-    @Around("withinPointCut() && !annotationPointCut()")
+    @Around("classPointCut())")
     public Object classCheck(ProceedingJoinPoint point) throws Throwable{
 
         Role[] value = getClassValues(point);
+        String token = getToken();
 
-        return (checkPermission(value))? point.proceed() : Result.codeFailure(ResultCode.ACCESS_DENIED);
+        return (checkPermission(value,token))? point.proceed() : Result.codeFailure(ResultCode.ACCESS_DENIED);
     }
 
 
@@ -84,11 +165,24 @@ public class PermissionAspect {
      * @return 切面方法的返回值
      * @throws Throwable 可抛出的异常
      */
-    @Around("withinPointCut() && annotationPointCut()")
+    @Around("classAndMethodPointCut()")
     public Object classAndMethodCheck(ProceedingJoinPoint point) throws Throwable {
+        Role[] roles = getClassAndMethodValue(point);
+        String token = getToken();
+        return (checkPermission(roles,token))? point.proceed() : Result.codeFailure(ResultCode.ACCESS_DENIED);
+    }
+
+    /**
+     * 获取类和方法的权限值
+     *
+     * @param point 方法连接点
+     * @return 权限值数组
+     * @throws Throwable 异常
+     */
+    private Role[] getClassAndMethodValue(ProceedingJoinPoint point) throws Throwable {
         //若类 的 isIndividual()为true，则方法中的isIndividual()就不用获取
         boolean flag = false;
-        // 获取方法上的Permission注解
+        // 获取类上的Permission注解
         Permission annotation = point.getTarget().getClass().getAnnotation(Permission.class);
 
         Set<Role> roles = new HashSet<>();
@@ -97,6 +191,7 @@ public class PermissionAspect {
             // 如果类上的Permission注解为isIndividual() false，则获取类上的Permission注解中的角色
             Role[] values = annotation.value();
             roles = Arrays.stream(values).collect(Collectors.toSet());
+        }else {
             flag = true;
         }
 
@@ -115,7 +210,7 @@ public class PermissionAspect {
         Role[] value = roles.toArray(new Role[0]);
         // 判断是否具有执行当前方法的权限，如果没有则返回访问失败的结果
         // 返回访问失败的结果
-        return (checkPermission(value))? point.proceed() : Result.codeFailure(ResultCode.ACCESS_DENIED);
+        return value;
     }
 
 
@@ -178,16 +273,7 @@ public class PermissionAspect {
      * @param roles 权限注解中的角色类型数组
      * @return 如果请求用户的角色与数组中任意一个角色匹配，则返回true；否则返回false
      */
-    private boolean checkPermission(Role[] roles) {
-
-        // 将请求包装成Servlet请求属性，获取请求对象
-        ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
-        HttpServletRequest request = attributes.getRequest();
-        // 获取请求头中的token
-        String token = request.getHeader("token");
-        //利用parameter进行schoolid的认证
-//        String schoolId = request.getParameter("schoolId");
-//        System.out.println(schoolId);
+    private boolean checkPermission(Role[] roles,String token) {
 
         // 通过token获取用户的角色
         Integer role = JwtUtil.getRole(token);
@@ -202,6 +288,48 @@ public class PermissionAspect {
         return false;
     }
 
+    /**
+     * 校验角色是否有权限
+     * @param roles 角色数组
+     * @param schoolId 学校ID
+     * @return 如果有权限返回true，否则返回false
+     */
+    private boolean checkPermission(Role[] roles,long schoolId) {
+        String token = getToken();
+
+        Long deptId = JwtUtil.getDeptId(token);
+        if (deptId == schoolId){
+            return checkPermission(roles,token);
+        }
+        return false;
+    }
+
+
+    /**
+     * 从header中获取token
+     *
+     * @return token
+     */
+    private String getToken(){
+        // 将请求包装成Servlet请求属性，获取请求对象
+        HttpServletRequest request = getRequest();
+        // 获取请求头中的Token
+        String token = request.getHeader("token");
+        return token;
+    }
+
+
+    /**
+     * 获取HttpServletRequest对象
+     *
+     * @return HttpServletRequest对象
+     */
+    private HttpServletRequest getRequest(){
+        ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+        HttpServletRequest request = attributes.getRequest();
+        return request;
+    }
+
 
     /**
      * 向角色数组中添加角色
@@ -212,12 +340,14 @@ public class PermissionAspect {
      * @return 添加角色后的角色数组
      */
     private Role[] addRole(Role[] roles, Role role) {
+
+        int length = roles.length;
         // 创建一个新的角色数组，长度为原数组长度加1
-        Role[] newRole = new Role[roles.length + 1];
+        Role[] newRole = new Role[length + 1];
         // 将原角色数组复制到新数组中
-        System.arraycopy(roles, 0, newRole, 0, roles.length);
+        System.arraycopy(roles, 0, newRole, 0, length);
         // 将待添加的角色放入新数组的最后一个位置
-        newRole[roles.length - 1] = role;
+        newRole[length] = role;
         // 将新数组赋值给原数组，实现角色的添加
         return newRole;
     }

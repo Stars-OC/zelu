@@ -28,8 +28,6 @@ public class AdminManagerController {
     @Autowired
     private UserService userService;
 
-//    @Autowired
-//    private InfoContrller infoContrller;
 
     /**
      * 添加用户利用User对象

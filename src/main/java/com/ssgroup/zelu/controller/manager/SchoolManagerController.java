@@ -24,12 +24,13 @@ public class SchoolManagerController {
     private CourseManagerService courseManagerService;
 
     @GetMapping("/info")
+    @Permission(Role.SCHOOL_ADMIN)
     public Result<PageList<Course>> getCoursesBySchoolId(@RequestParam long schoolId, @RequestPage int[] page) {
         return Result.success(courseManagerService.getCoursesBySchoolId(schoolId, page[0], page[1]));
     }
 
     @PostMapping("/add")
-    public Result<String> addCourse(@Validated @RequestBody Course course ) {
+    public Result<String> addCourse(@Validated @RequestBody Course course) {
         courseManagerService.addByAdmin(course);
         return Result.success();
     }

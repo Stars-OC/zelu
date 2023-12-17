@@ -33,33 +33,6 @@ public class UserService {
     @Autowired
     private FileConfiguration file;
 
-    /**
-     * 判断给定条件在指定数据表中是否存在
-     * @param mapper 数据表名
-     * @param type 列名
-     * @param value 列值
-     * @return 存在返回对应对象，否则返回null
-     */
-    private Object isExists(String mapper, String type, Object value) {
-        switch (mapper) {
-            case "user":
-                return userMapper.selectOne(new QueryWrapper<User>().eq(type, value));
-            default:
-                return null;
-        }
-    }
-
-    /**
-     * 根据指定的用户名查找用户
-     *
-     * @param username 要查找的用户名
-     * @return 如果找到匹配的用户，则返回该用户对象；否则返回null
-     */
-    public User findUsername(Long username){
-        return (User) isExists("user","username", username);
-    }
-
-
 
 
     /**
@@ -83,7 +56,7 @@ public class UserService {
      */
     public String updateInfo(User user) {
         if (user.getNewPassword() != null){
-            User oldUser = findUsername(user.getUsername());
+            User oldUser = userMapper.selectById(user.getUsername());
             String newPassword = AesUtil.encrypt(user.getNewPassword());
             if (oldUser.getPassword().equalsIgnoreCase(newPassword)) {
                 // 对更新后的用户密码进行加密
