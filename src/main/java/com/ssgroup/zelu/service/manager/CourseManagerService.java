@@ -44,4 +44,9 @@ public class CourseManagerService {
         Page<Course> selectPage = courseMapper.selectPage(userPage, null);
         return new PageList<>(selectPage);
     }
+
+    public void add(long schoolId, Course course) {
+        course.setSchoolId(schoolId);
+        courseMapper.insert(course);
+    }
 }

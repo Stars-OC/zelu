@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.annotation.*;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.ssgroup.zelu.utils.JwtUtil;
 import io.jsonwebtoken.Claims;
+import jakarta.validation.constraints.NotEmpty;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -15,6 +16,7 @@ public class School {
     @TableId(type = IdType.AUTO)
     private Integer schoolId;
 
+    @NotEmpty
     private String schoolName;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
@@ -27,6 +29,7 @@ public class School {
 
     private String schoolAddress;
 
+    @NotEmpty
     private String phone;
 
     private Integer status;

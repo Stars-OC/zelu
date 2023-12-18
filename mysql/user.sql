@@ -61,7 +61,7 @@ create table course
     course_name   varchar(30) not null,
     course_avatar varchar(255) default null,
     course_desc   varchar(255),
-    status int         not null,
+    status int   default 0     not null,
     school_id    bigint      not null,
     create_at  BIGINT  not null comment '秒级',
     deleted    tinyint(1) default 0         not null

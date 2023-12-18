@@ -40,9 +40,4 @@ public @interface Permission {
      */
     boolean isAllowAdmin() default true;
 
-    /**
-     * 是否检查COURSE_ASSISTANT权限正确
-     * @return boolean
-     */
-    boolean checkCourseAssistant() default false;
 }

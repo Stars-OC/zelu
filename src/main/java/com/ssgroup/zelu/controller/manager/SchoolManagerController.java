@@ -23,17 +23,32 @@ public class SchoolManagerController {
     @Autowired
     private CourseManagerService courseManagerService;
 
+    /**
+     * 根据学校ID获取课程信息
+     *
+     * @param schoolId 学校ID
+     * @param page 分页信息
+     * @return 课程信息结果
+     */
     @GetMapping("/info")
-    @Permission(Role.SCHOOL_ADMIN)
     public Result<PageList<Course>> getCoursesBySchoolId(@RequestParam long schoolId, @RequestPage int[] page) {
         return Result.success(courseManagerService.getCoursesBySchoolId(schoolId, page[0], page[1]));
     }
 
+
+    /**
+     * 添加课程 教师也可以访问
+     *
+     * @param schoolId 学校ID
+     * @param course 课程信息
+     */
+    @Permission(Role.TEACHER)
     @PostMapping("/add")
-    public Result<String> addCourse(@Validated @RequestBody Course course) {
-        courseManagerService.addByAdmin(course);
+    public Result<String> addCourse(@RequestParam long schoolId,@Validated @RequestBody Course course){
+        courseManagerService.add(schoolId,course);
         return Result.success();
     }
+
 
     @PostMapping("/update")
     public Result<String> updateCourse(@RequestBody Course course) {
@@ -50,4 +65,6 @@ public class SchoolManagerController {
                 Result.success("删除 [" + count + "/" + courses.length + "] 成功") :
                 Result.failure("删除失败");
     }
+
+
 }

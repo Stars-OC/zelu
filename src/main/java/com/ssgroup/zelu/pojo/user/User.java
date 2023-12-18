@@ -26,9 +26,11 @@ public class User {
 
     @NotEmpty(message = "密码不能为空")
     @TableField(fill = FieldFill.INSERT)
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
 
     @TableField(exist = false)
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String newPassword;
 
     @URL(message = "头像地址不合法")
@@ -47,26 +49,6 @@ public class User {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @TableField(fill = FieldFill.INSERT,updateStrategy = FieldStrategy.NEVER)
     private Long createAt;
-
-    @JsonIgnore
-    public String getPassword() {
-        return password;
-    }
-
-    @JsonProperty
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    @JsonIgnore
-    public String getNewPassword() {
-        return newPassword;
-    }
-
-    @JsonProperty
-    public void setNewPassword(String newPassword) {
-        this.newPassword = newPassword;
-    }
 
     public User(String token){
         Claims claims = JwtUtil.getClaims(token);
