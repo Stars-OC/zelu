@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class Company {
     @TableId(type = IdType.AUTO)
-    private String companyId;
+    private Long companyId;
 
     @NotEmpty
     private String companyName;

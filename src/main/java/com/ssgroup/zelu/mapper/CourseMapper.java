@@ -2,7 +2,10 @@ package com.ssgroup.zelu.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.ssgroup.zelu.pojo.department.Course;
+import com.ssgroup.zelu.pojo.request.SchoolAndCourseId;
+import com.ssgroup.zelu.pojo.user.User;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 
 @Mapper
@@ -16,4 +19,15 @@ public interface CourseMapper extends BaseMapper<Course> {
      */
     @Update("update course set deleted = #{deleted} where course_info = #{id}")
     void updateDeleted(long id,int deleted);
+
+    /**
+     * 检查用户是否有权限访问课程
+     *
+     * @param username 用户名
+     * @param schoolAndCourseId 封装课程和学校id
+     */
+    //select username,role from course,course_user where course.course_id = course_user.course_id and course.school_id = 100000 and course_user.username = 123456;
+    @Select("select role from course,course_user where course.course_id = course_user.course_id = #{schoolAndCourseId.courseId} and course_user.username = #{username} and course.school_id = #{schoolAndCourseId.schoolId}")
+    Integer getCourseRoleToCheck(long username, SchoolAndCourseId schoolAndCourseId);
+
 }

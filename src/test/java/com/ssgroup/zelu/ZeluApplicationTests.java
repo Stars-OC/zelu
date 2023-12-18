@@ -2,9 +2,11 @@ package com.ssgroup.zelu;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.ssgroup.zelu.annotation.Permission;
+import com.ssgroup.zelu.mapper.CourseMapper;
 import com.ssgroup.zelu.mapper.UserMapper;
 import com.ssgroup.zelu.pojo.department.Course;
 import com.ssgroup.zelu.pojo.department.School;
+import com.ssgroup.zelu.pojo.request.SchoolAndCourseId;
 import com.ssgroup.zelu.pojo.user.User;
 import com.ssgroup.zelu.service.UserService;
 import com.ssgroup.zelu.service.manager.SchoolManagerService;
@@ -29,17 +31,18 @@ class ZeluApplicationTests {
 	private UserMapper userMapper;
 
 	@Autowired
+	private CourseMapper courseMapper;
+
+	@Autowired
 	private SchoolManagerService schoolManagerService;
 
 	@Test
 	void contextLoads() throws FileNotFoundException, InterruptedException {
-		int i = 0;
-		while (true){
-
-			test1(++i);
-			test2(i);
-			Thread.sleep(1000);
-		}
+		SchoolAndCourseId schoolAndCourseId = new SchoolAndCourseId();
+		schoolAndCourseId.setSchoolId(100000);
+		schoolAndCourseId.setCourseId(1);
+		Integer a = courseMapper.getCourseRoleToCheck(12345, schoolAndCourseId);
+		System.out.println(a);
 
 	}
 

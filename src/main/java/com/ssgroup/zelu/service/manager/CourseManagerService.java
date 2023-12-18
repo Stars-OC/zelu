@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.ssgroup.zelu.mapper.CourseMapper;
 import com.ssgroup.zelu.pojo.PageList;
 import com.ssgroup.zelu.pojo.department.Course;
+import com.ssgroup.zelu.pojo.request.SchoolAndCourseId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -49,4 +50,7 @@ public class CourseManagerService {
         course.setSchoolId(schoolId);
         courseMapper.insert(course);
     }
+
+
+
 }

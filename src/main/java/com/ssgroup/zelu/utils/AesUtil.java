@@ -17,6 +17,8 @@ public class AesUtil {
     //密钥，长度必须为16、24、32位
     private static final String KEY = "gF1/S8n5kXLYJJWU";
 
+    public static final String DEFAULT_PASSWORD = AesUtil.encrypt("MTIzNDU2");
+
     /**
      * 使用密钥对明文进行加密，并将密文转换成Base64编码的字符串返回
      *

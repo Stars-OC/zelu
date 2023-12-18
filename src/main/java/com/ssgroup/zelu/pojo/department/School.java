@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 public class School {
 
     @TableId(type = IdType.AUTO)
-    private Integer schoolId;
+    private Long schoolId;
 
     @NotEmpty
     private String schoolName;

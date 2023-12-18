@@ -14,7 +14,7 @@ import lombok.Getter;
 public class Course {
 
     @TableId(type = IdType.AUTO)
-    private String courseId;
+    private Long courseId;
 
     @NotEmpty
     private String courseName;

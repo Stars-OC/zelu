@@ -2,7 +2,7 @@ package com.ssgroup.zelu.controller;
 
 import com.ssgroup.zelu.pojo.Result;
 import com.ssgroup.zelu.pojo.user.User;
-import com.ssgroup.zelu.pojo.UsernameAndPWD;
+import com.ssgroup.zelu.pojo.request.UsernameAndPWD;
 import com.ssgroup.zelu.service.auth.AuthService;
 import com.ssgroup.zelu.service.auth.JwtService;
 import jakarta.validation.constraints.NotEmpty;
@@ -43,7 +43,7 @@ public class LoginController {
      * @return 登录结果
      */
     @GetMapping("/login/wechat")
-    public Result<String> loginWechat(@RequestParam String code){
+    public Result<String> loginWechat(String code){
 
         String jwt = authService.loginWechat(code);
         return jwt != null?
@@ -85,7 +85,7 @@ public class LoginController {
      * @return 登录结果
      */
     @GetMapping("/logout")
-    public Result<String> logout(@RequestParam @NotEmpty(message = "用户名不能为空") String username){
+    public Result<String> logout(@NotEmpty(message = "用户名不能为空") String username){
 
         jwtService.deleteJwtByUsername(username);
 

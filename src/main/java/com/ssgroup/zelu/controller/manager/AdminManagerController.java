@@ -86,7 +86,7 @@ public class AdminManagerController {
      * @return 结果对象，包含操作是否成功的提示信息
      */
     @GetMapping("/user/delete")
-    public Result<String> deleteUser(@RequestParam @NotNull Long[] users) {
+    public Result<String> deleteUser(@NotNull Long[] users) {
         // 调用ManagerService的deleteUsers方法删除用户
         int count = userManagerService.deleteUsers(users);
         // 判断删除结果，如果删除成功返回成功提示信息，否则返回删除失败提示信息
@@ -128,7 +128,8 @@ public class AdminManagerController {
      * @return 结果对象，如果成功更新返回"修改成功"，否则返回"修改失败"
      */
     @PostMapping("/school/update")
-    public Result<String> updateSchool(School school, @RequestBody School schoolData) {
+
+    public Result<String> updateSchool(@RequestToken("school") School school, @RequestBody School schoolData) {
         try {
             schoolManagerService.updateByAdmin(schoolData);
             log.info(school.getSchoolName());
@@ -145,7 +146,7 @@ public class AdminManagerController {
      * @return 结果对象，包含操作是否成功的信息和提示消息
      */
     @GetMapping("/school/delete")
-    public Result<String> deleteSchool(@RequestParam @NotNull Long[] schools) {
+    public Result<String> deleteSchool(@NotNull Long[] schools) {
         // 调用schoolManagerService的删除学校方法，返回删除的学校数量
         int count = schoolManagerService.deleteByAdmin(schools);
         // 如果删除的学校数量大于0，则表示删除成功，返回成功的结果对象；否则返回删除失败的结果对象

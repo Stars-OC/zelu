@@ -15,7 +15,7 @@ public class MybatisPlusConfig implements MetaObjectHandler {
 
     /**
      * 分页插件配置
-     *
+     * <p>
      * - 使用PaginationInnerInterceptor实现分页功能
      */
     @Bean
@@ -28,7 +28,7 @@ public class MybatisPlusConfig implements MetaObjectHandler {
 
     /**
      * 插入填充操作
-     * 将当前时间的秒数设置为指定字段的值
+     * <p>将当前时间的秒数设置为指定字段的值
      *
      * @param metaObject 元对象
      */
@@ -36,7 +36,7 @@ public class MybatisPlusConfig implements MetaObjectHandler {
     public void insertFill(MetaObject metaObject) {
         this.setFieldValByName("createAt", System.currentTimeMillis()/1000, metaObject);
         //将密码进行填充
-        this.setFieldValByName("password", AesUtil.encrypt("MTIzNDU2") , metaObject);
+        this.setFieldValByName("password", AesUtil.DEFAULT_PASSWORD , metaObject);
     }
 
     @Override

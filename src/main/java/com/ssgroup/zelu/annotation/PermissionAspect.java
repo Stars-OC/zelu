@@ -1,9 +1,12 @@
 package com.ssgroup.zelu.annotation;
 
-import com.ssgroup.zelu.annotation.Permission;
 import com.ssgroup.zelu.pojo.Result;
+import com.ssgroup.zelu.pojo.request.SchoolAndCourseId;
 import com.ssgroup.zelu.pojo.type.ResultCode;
 import com.ssgroup.zelu.pojo.type.Role;
+import com.ssgroup.zelu.pojo.user.User;
+import com.ssgroup.zelu.service.CourseService;
+import com.ssgroup.zelu.service.manager.CourseManagerService;
 import com.ssgroup.zelu.utils.JwtUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -11,6 +14,7 @@ import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
@@ -28,7 +32,9 @@ import java.util.stream.Collectors;
 @Order(1)
 public class PermissionAspect {
     //先用AOP实现，其他有时间再看看能不能直接用原生实现
-    //TODO 实现COURSE_ASSISTANT权限的检查
+
+    @Autowired
+    private CourseService courseService;
 
     /**
      * 方法注解切面
@@ -70,6 +76,15 @@ public class PermissionAspect {
     private void classAndMethodPointCut() {
     }
 
+    /**
+     * 指定在方法执行前执行args(request,..)  args(com.ssgroup.zelu.pojo.request.SchoolAndCourseId,..)
+     *
+     * @param request 学校和课程ID请求
+     */
+    @Pointcut("args(request,..) args(com.ssgroup.zelu.pojo.request.SchoolAndCourseId,..)")
+    private void argsPointCut(SchoolAndCourseId request) {
+    }
+
 
     /**
      * 在类和方法的切点 around 定义权限检查的切面方法，
@@ -78,15 +93,15 @@ public class PermissionAspect {
      * 否则返回权限失败的结果。
      *
      * @param point 方法连接点
-     * @param schoolId 学校ID
+     * @param schoolAndCourseId 学校和课程ID请求
      * @return 方法执行结果或者权限失败的结果
      * @throws Throwable 异常
      */
-    @Around("classAndMethodPointCut() && args(schoolId,..)")
-    public Object classAndMethodArgsCheck(ProceedingJoinPoint point, long schoolId) throws Throwable {
+    @Around("classAndMethodPointCut() && argsPointCut(schoolAndCourseId)")
+    public Object classAndMethodArgsCheck(ProceedingJoinPoint point, SchoolAndCourseId schoolAndCourseId) throws Throwable {
         Role[] value = getClassAndMethodValue(point);
         // 没有权限，返回权限失败的结果
-        return (checkPermission(value, schoolId)) ? point.proceed() : Result.codeFailure(ResultCode.ACCESS_DENIED);
+        return (checkPermission(value, schoolAndCourseId)) ? point.proceed() : Result.codeFailure(ResultCode.ACCESS_DENIED);
     }
 
 
@@ -95,31 +110,32 @@ public class PermissionAspect {
      * 如果方法权限为空或者方法参数schoolId的值不在方法权限范围内，则返回权限失败的结果。
      *
      * @param point 方法连接点
-     * @param schoolId 学校ID
+     * @param schoolAndCourseId 学校和课程ID请求
      * @return 方法执行结果或者权限失败的结果
      * @throws Throwable 异常
      */
-    @Around("methodPointCut() && args(schoolId,..)")
-    public Object methodArgsCheck(ProceedingJoinPoint point, long schoolId) throws Throwable {
+    @Around("methodPointCut() && argsPointCut(schoolAndCourseId)")
+    public Object methodArgsCheck(ProceedingJoinPoint point, SchoolAndCourseId schoolAndCourseId) throws Throwable {
         Role[] value = getMethodValues(point);
         // 没有权限，返回权限失败的结果
-        return (checkPermission(value, schoolId)) ? point.proceed() : Result.codeFailure(ResultCode.ACCESS_DENIED);
+        return (checkPermission(value, schoolAndCourseId)) ? point.proceed() : Result.codeFailure(ResultCode.ACCESS_DENIED);
     }
 
 
     /**
      * 对方法执行前进行权限检查，
      * 如果方法所属的类权限为空或者方法参数schoolId的值不在方法权限范围内，则返回权限失败的结果。
+     *
      * @param point 方法连接点
-     * @param schoolId 学校ID
+     * @param schoolAndCourseId 学校和课程ID请求
      * @return 方法执行结果或者权限失败的结果
      * @throws Throwable 异常
      */
-    @Around("classPointCut() && args(schoolId,..)")
-    public Object classArgsCheck(ProceedingJoinPoint point, long schoolId) throws Throwable {
+    @Around("classPointCut() && argsPointCut(schoolAndCourseId)")
+    public Object classArgsCheck(ProceedingJoinPoint point, SchoolAndCourseId schoolAndCourseId) throws Throwable {
         Role[] value = getClassValues(point);
         // 没有权限，返回权限失败的结果
-        return (checkPermission(value, schoolId)) ? point.proceed() : Result.codeFailure(ResultCode.ACCESS_DENIED);
+        return (checkPermission(value, schoolAndCourseId)) ? point.proceed() : Result.codeFailure(ResultCode.ACCESS_DENIED);
     }
 
 
@@ -167,10 +183,14 @@ public class PermissionAspect {
      */
     @Around("classAndMethodPointCut()")
     public Object classAndMethodCheck(ProceedingJoinPoint point) throws Throwable {
+        // 获取类和方法的注解值
         Role[] roles = getClassAndMethodValue(point);
+        // 获取令牌
         String token = getToken();
+        // 检查权限
         return (checkPermission(roles,token))? point.proceed() : Result.codeFailure(ResultCode.ACCESS_DENIED);
     }
+
 
     /**
      * 获取类和方法的权限值
@@ -183,13 +203,13 @@ public class PermissionAspect {
         //若类 的 isIndividual()为true，则方法中的isIndividual()就不用获取
         boolean flag = false;
         // 获取类上的Permission注解
-        Permission annotation = point.getTarget().getClass().getAnnotation(Permission.class);
+        Permission classAnnotation = point.getTarget().getClass().getAnnotation(Permission.class);
 
         Set<Role> roles = new HashSet<>();
 
-        if (!annotation.isIndividual()) {
+        if (!classAnnotation.isIndividual()) {
             // 如果类上的Permission注解为isIndividual() false，则获取类上的Permission注解中的角色
-            Role[] values = annotation.value();
+            Role[] values = classAnnotation.value();
             roles = Arrays.stream(values).collect(Collectors.toSet());
         }else {
             flag = true;
@@ -204,12 +224,16 @@ public class PermissionAspect {
             // 如果方法上的Permission注解为isIndividual() true 或者类的isIndividual() true ，则清空角色集合
             roles.clear();
         }
+
+        // 如果都没有限制admin，admin就有权限
+        if (classAnnotation.isAllowAdmin() && methodAnnotation.isAllowAdmin()){
+            roles.add(Role.ADMIN);
+        }
         // 将方法上的Permission注解中的角色添加到角色集合中
         Collections.addAll(roles, methodAnnotation.value());
         // 将角色集合转换为数组
         Role[] value = roles.toArray(new Role[0]);
-        // 判断是否具有执行当前方法的权限，如果没有则返回访问失败的结果
-        // 返回访问失败的结果
+        // 返回角色数组
         return value;
     }
 
@@ -271,6 +295,7 @@ public class PermissionAspect {
      * 检查权限方法
      *
      * @param roles 权限注解中的角色类型数组
+     * @param token 令牌
      * @return 如果请求用户的角色与数组中任意一个角色匹配，则返回true；否则返回false
      */
     private boolean checkPermission(Role[] roles,String token) {
@@ -279,31 +304,40 @@ public class PermissionAspect {
         Integer role = JwtUtil.getRole(token);
 
         // 遍历权限注解中的角色类型数组
-        for (Role type : roles) {
-            // 如果遍历到的角色类型和当前用户的角色类型一致，则继续执行方法
-            if (type.getRole() == role) {
-                return true;
-            }
-        }
-        return false;
+        return Role.checkRole(roles,role);
     }
 
     /**
      * 校验角色是否有权限
+     *
      * @param roles 角色数组
-     * @param schoolId 学校ID
+     * @param schoolAndCourseId 学校和课程ID请求
      * @return 如果有权限返回true，否则返回false
      */
-    private boolean checkPermission(Role[] roles,long schoolId) {
+    private boolean checkPermission(Role[] roles, SchoolAndCourseId schoolAndCourseId) {
+
+        // 获取Token
         String token = getToken();
 
-        Long deptId = JwtUtil.getDeptId(token);
-        if (deptId == schoolId){
-            return checkPermission(roles,token);
+        // 创建User对象并获取部门ID、角色和用户名
+        User user = new User(token);
+        long deptId = user.getDeptId();
+        int role = user.getRole();
+        long username = user.getUsername();
+
+        // 如果课程ID为0且部门ID与学校ID相等，则为学校的校验权限
+        if (schoolAndCourseId.getCourseId() == 0 && deptId == schoolAndCourseId.getSchoolId()){
+            return Role.checkRole(roles,role);
         }
+
+        // 如果角色是课程角色，则为课程的校验权限
+        if (Role.isCourseRole(roles)){
+            return courseService.checkRole(role,username,schoolAndCourseId) && Role.checkRole(roles,role);
+        }
+
+        // 其他情况无权限
         return false;
     }
-
 
     /**
      * 从header中获取token

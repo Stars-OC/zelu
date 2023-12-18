@@ -1,4 +1,4 @@
-package com.ssgroup.zelu.pojo;
+package com.ssgroup.zelu.pojo.request;
 
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
