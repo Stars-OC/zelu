@@ -12,6 +12,10 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.URL;
 
+
+/**
+ * 用户类
+ */
 @Data
 @NoArgsConstructor
 @TableName("user")

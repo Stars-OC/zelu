@@ -1,6 +1,5 @@
 package com.ssgroup.zelu.controller.manager;
 
-import com.ssgroup.zelu.annotation.CoursePermission;
 import com.ssgroup.zelu.annotation.Permission;
 import com.ssgroup.zelu.annotation.RequestPage;
 import com.ssgroup.zelu.pojo.PageList;
@@ -28,32 +27,48 @@ public class SchoolManagerController {
     /**
      * 根据学校ID获取课程信息
      *
-     * @param schoolId 学校ID
+     * @param schoolCourseID 学校与课程请求ID
      * @param page 分页信息
      * @return 课程信息结果
      */
     @GetMapping("/info")
-    public Result<PageList<Course>> getCoursesBySchoolId(long schoolId, @RequestPage int[] page) {
-        return Result.success(courseManagerService.getCoursesBySchoolId(schoolId, page[0], page[1]));
+    public Result<PageList<Course>> getCoursesBySchoolId(@Validated SchoolAndCourseId schoolCourseID, @RequestPage int[] page) {
+        return Result.success(courseManagerService.getCoursesBySchoolId(schoolCourseID.getSchoolId(), page[0], page[1]));
     }
 
 
     /**
      * 添加课程 教师也可以访问
      *
-     * @param schoolId 学校ID
+     * @param schoolCourseID 学校与课程请求ID
      * @param course 课程信息
      */
     @Permission(Role.TEACHER)
     @PostMapping("/add")
-    public Result<String> addCourse(long schoolId,@Validated @RequestBody Course course){
-        courseManagerService.add(schoolId,course);
+    public Result<String> addCourse(@Validated SchoolAndCourseId schoolCourseID,@Validated @RequestBody Course course){
+        courseManagerService.add(schoolCourseID.getSchoolId(),course);
         return Result.success();
     }
 
 
+    /**
+     * 更新课程
+     *
+     * @param schoolCourseID 学校和课程ID
+     * @param course 课程对象
+     * @return 更新结果
+     */
+    @Permission(Role.TEACHER)
     @PostMapping("/update")
-    public Result<String> updateCourse(@RequestBody Course course) {
+    public Result<String> updateCourse(@Validated SchoolAndCourseId schoolCourseID,@Validated @RequestBody Course course){
+        courseManagerService.update(schoolCourseID.getSchoolId(),course);
+        return Result.success("更新成功");
+    }
+
+
+
+    @PostMapping("admin/update")
+    public Result<String> updateCourseByAdmin(@RequestBody Course course) {
         courseManagerService.updateByAdmin(course);
         return Result.success();
     }

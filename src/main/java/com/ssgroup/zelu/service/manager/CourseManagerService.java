@@ -52,5 +52,13 @@ public class CourseManagerService {
     }
 
 
+    public void update(long schoolId, Course course) {
+        course.setSchoolId(schoolId);
+        courseMapper.updateById(course);
+    }
 
+    public Course getInfo(SchoolAndCourseId schoolCourseID) {
+        Course course = courseMapper.selectById(schoolCourseID.getCourseId());
+        return course;
+    }
 }

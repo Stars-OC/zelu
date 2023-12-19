@@ -4,6 +4,9 @@ import com.ssgroup.zelu.pojo.Result;
 import com.ssgroup.zelu.pojo.user.User;
 import com.ssgroup.zelu.service.auth.JwtService;
 import com.ssgroup.zelu.service.UserService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -17,6 +20,7 @@ import java.io.IOException;
 
 @RestController
 @RequestMapping("/api/user")
+@Tag(name = "用户信息接口", description = "用户信息接口")
 public class UserController {
 
     @Autowired
@@ -56,13 +60,15 @@ public class UserController {
     }
 
 
-     /**
+    /**
      * 上传用户信息
      *
      * @param user 用户信息
      * @return 结果对象
      */
+    @Operation(summary = "上传用户信息")
     @PostMapping("/update/info")
+    @Parameter
     public Result<String> updateInfo(@RequestBody @Validated User user){
 
         String jwt = userService.updateInfo(user);

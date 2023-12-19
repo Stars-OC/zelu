@@ -9,6 +9,9 @@ import java.lang.annotation.Target;
 
 /**
  * 对于权限的相关注解
+ * <p>
+ * 对于学校课程的相关模块在parma中需要添加
+ * SchoolAndCourseId对象才能进一步权限认证
  *
  * @apiNote    value 角色 Role[] 枚举类型的数组
  * isIndividual  是否是个体

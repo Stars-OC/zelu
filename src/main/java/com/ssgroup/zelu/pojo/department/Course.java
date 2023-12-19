@@ -23,6 +23,7 @@ public class Course {
 
     private String courseDesc;
 
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private Integer status;
 
     @TableField(updateStrategy = FieldStrategy.NEVER)

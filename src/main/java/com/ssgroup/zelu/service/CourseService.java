@@ -2,6 +2,7 @@ package com.ssgroup.zelu.service;
 
 import com.ssgroup.zelu.mapper.CourseMapper;
 import com.ssgroup.zelu.pojo.request.SchoolAndCourseId;
+import com.ssgroup.zelu.pojo.type.Role;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -9,6 +10,7 @@ import org.springframework.stereotype.Service;
 public class CourseService {
     @Autowired
     private CourseMapper courseMapper;
+
     /**
      * 校验用户角色
      *
@@ -22,6 +24,6 @@ public class CourseService {
         Integer checkRole = courseMapper.getCourseRoleToCheck(username, schoolAndCourseId);
 
         // 直接返回需要检查的角色和传入的角色是否相等
-        return checkRole != null && checkRole == role;
+        return checkRole != null && checkRole <= role && checkRole >= Role.COURSE_ASSISTANT.getRole();
     }
 }

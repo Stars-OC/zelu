@@ -48,15 +48,16 @@ public class LoginFilter implements Filter {
 
         // 如果URL包含"/user/login"或"/user/register"，则不进行鉴权，直接放行
         //TODO 后面利用list或者其他方法放行这些接口
-        if (url.contains("/auth/login") || url.contains("/auth/register")) {
+//        System.out.println(url);
+        if (url.contains("/auth/login") || url.contains("/auth/register") || !url.contains("/api/")) {
             chain.doFilter(servletRequest, servletResponse);
             return;
         }
 
         //CORS域 配置
-//        response.addHeader("Access-Control-Allow-Origin", "*");
-//        response.addHeader("Access-Control-Allow-Methods", "GET, POST");
-//        response.addHeader("Access-Control-Allow-Headers", "Content-Type,token");
+        response.addHeader("Access-Control-Allow-Origin", "*");
+        response.addHeader("Access-Control-Allow-Methods", "GET, POST");
+        response.addHeader("Access-Control-Allow-Headers", "Content-Type,token");
 
         // 获取请求头中的token
         String token = request.getHeader("token");
