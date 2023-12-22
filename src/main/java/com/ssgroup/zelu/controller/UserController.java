@@ -2,8 +2,8 @@ package com.ssgroup.zelu.controller;
 
 import com.ssgroup.zelu.pojo.Result;
 import com.ssgroup.zelu.pojo.user.User;
-import com.ssgroup.zelu.service.auth.JwtService;
 import com.ssgroup.zelu.service.UserService;
+import com.ssgroup.zelu.service.auth.JwtService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;

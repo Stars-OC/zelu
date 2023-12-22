@@ -1,10 +1,8 @@
 package com.ssgroup.zelu.service.manager;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.ssgroup.zelu.mapper.SchoolMapper;
 import com.ssgroup.zelu.mapper.UserMapper;
 import com.ssgroup.zelu.pojo.PageList;
-import com.ssgroup.zelu.pojo.department.School;
 import com.ssgroup.zelu.pojo.user.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

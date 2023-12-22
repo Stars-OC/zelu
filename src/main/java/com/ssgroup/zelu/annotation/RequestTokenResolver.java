@@ -1,7 +1,5 @@
 package com.ssgroup.zelu.annotation;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.ssgroup.zelu.mapper.UserMapper;
 import com.ssgroup.zelu.pojo.user.User;
 import com.ssgroup.zelu.service.DeptService;
 import com.ssgroup.zelu.utils.JwtUtil;

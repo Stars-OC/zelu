@@ -6,7 +6,6 @@ import com.ssgroup.zelu.pojo.type.ResultCode;
 import com.ssgroup.zelu.pojo.type.Role;
 import com.ssgroup.zelu.pojo.user.User;
 import com.ssgroup.zelu.service.CourseService;
-import com.ssgroup.zelu.service.manager.CourseManagerService;
 import com.ssgroup.zelu.utils.JwtUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import org.aspectj.lang.ProceedingJoinPoint;

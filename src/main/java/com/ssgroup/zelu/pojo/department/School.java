@@ -2,8 +2,6 @@ package com.ssgroup.zelu.pojo.department;
 
 import com.baomidou.mybatisplus.annotation.*;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.ssgroup.zelu.utils.JwtUtil;
-import io.jsonwebtoken.Claims;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.Data;
 import lombok.NoArgsConstructor;

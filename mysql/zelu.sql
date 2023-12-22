@@ -113,3 +113,45 @@ create table company_user
 
 create index idx_company_user on company_user (company_id, username);
 create index idx_role on company_user (role);
+
+#回复
+create table reply(
+    content_id BIGINT auto_increment primary key      not null,
+    discuss_id BIGINT                                 not null,
+    username BIGINT not null ,
+    content    text                                    not null,
+    resources text,
+    create_at BIGINT not null,
+    update_at BIGINT not null,
+    stars      int default 0 not null,
+    score     int default 0 not null,
+    reply_id BIGINT default 0 not null,
+    deleted  tinyint(1) default 0 not null
+);
+
+create index idx_discuss_id on reply (discuss_id);
+create index idx_username on reply (username);
+create index idx_create_time on reply (create_at);
+create index idx_replay_id on reply (reply_id);
+
+#点赞
+create table reply_star(
+    content_id BIGINT not null,
+    username  BIGINT not null,
+    primary key (content_id, username)
+);
+
+#讨论
+create table discuss(
+    discuss_id BIGINT auto_increment primary key      not null,
+    username BIGINT not null,
+    title    varchar(64),
+    content    text,
+    create_at BIGINT not null,
+    update_at BIGINT not null,
+    course_id BIGINT default 0 not null,
+    deleted  tinyint(1) default 0 not null
+);
+
+create index idx_username on discuss (username);
+create index idx_course_id on discuss (course_id);

@@ -37,6 +37,8 @@ public class User {
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String newPassword;
 
+    private String description;
+
     @URL(message = "头像地址不合法")
     private String avatarUrl;
 

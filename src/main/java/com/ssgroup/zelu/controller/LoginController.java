@@ -1,8 +1,8 @@
 package com.ssgroup.zelu.controller;
 
 import com.ssgroup.zelu.pojo.Result;
-import com.ssgroup.zelu.pojo.user.User;
 import com.ssgroup.zelu.pojo.request.UsernameAndPWD;
+import com.ssgroup.zelu.pojo.user.User;
 import com.ssgroup.zelu.service.auth.AuthService;
 import com.ssgroup.zelu.service.auth.JwtService;
 import jakarta.validation.constraints.NotEmpty;

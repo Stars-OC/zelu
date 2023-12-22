@@ -3,7 +3,6 @@ package com.ssgroup.zelu.mapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.ssgroup.zelu.pojo.department.Course;
 import com.ssgroup.zelu.pojo.request.SchoolAndCourseId;
-import com.ssgroup.zelu.pojo.user.User;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;

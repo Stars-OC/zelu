@@ -1,6 +1,5 @@
 package com.ssgroup.zelu.service;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.ssgroup.zelu.config.FileConfiguration;
 import com.ssgroup.zelu.mapper.UserMapper;

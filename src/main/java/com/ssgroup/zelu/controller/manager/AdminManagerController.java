@@ -1,17 +1,17 @@
 package com.ssgroup.zelu.controller.manager;
 
+import com.ssgroup.zelu.annotation.Permission;
 import com.ssgroup.zelu.annotation.RequestPage;
 import com.ssgroup.zelu.annotation.RequestToken;
-import com.ssgroup.zelu.annotation.Permission;
 import com.ssgroup.zelu.pojo.PageList;
 import com.ssgroup.zelu.pojo.Result;
 import com.ssgroup.zelu.pojo.department.School;
 import com.ssgroup.zelu.pojo.type.Role;
 import com.ssgroup.zelu.pojo.user.User;
+import com.ssgroup.zelu.service.UserService;
 import com.ssgroup.zelu.service.manager.CourseManagerService;
 import com.ssgroup.zelu.service.manager.SchoolManagerService;
 import com.ssgroup.zelu.service.manager.UserManagerService;
-import com.ssgroup.zelu.service.UserService;
 import jakarta.validation.constraints.NotNull;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
