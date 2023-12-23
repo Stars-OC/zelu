@@ -173,8 +173,6 @@ public class ReplyService {
         wrapper.eq("content_id", reply.getContentId());
         // 设置条件：discuss_id 相等
         wrapper.eq("discuss_id", reply.getDiscussId());
-        // 设置条件：username 相等
-        wrapper.eq("username", reply.getUsername());
         // 设置条件：reply_id 等于0
         wrapper.eq("reply_id", 0);
 

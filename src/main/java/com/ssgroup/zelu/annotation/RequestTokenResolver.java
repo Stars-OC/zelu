@@ -47,6 +47,8 @@ public class RequestTokenResolver implements HandlerMethodArgumentResolver {
         //判断注解是用户
         if ("user".equalsIgnoreCase(value)){
             return new User(token);
+        }else if ("username".equalsIgnoreCase(value)){
+            return JwtUtil.getUsername(token);
         }
 
         long deptType = JwtUtil.getDeptId(token);
