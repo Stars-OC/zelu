@@ -1,5 +1,6 @@
 package com.ssgroup.zelu.controller.discuss;
 
+import com.github.xiaoymin.knife4j.annotations.ApiOperationSupport;
 import com.ssgroup.zelu.annotation.Permission;
 import com.ssgroup.zelu.annotation.RequestPage;
 import com.ssgroup.zelu.annotation.RequestToken;
@@ -11,8 +12,11 @@ import com.ssgroup.zelu.pojo.type.Role;
 import com.ssgroup.zelu.pojo.user.User;
 import com.ssgroup.zelu.service.discuss.ReplyService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -47,10 +51,13 @@ public class ReplyController {
      * @param reply     回复内容
      * @return          返回结果字符串
      */
+    //@Parameter(name = "username", description = "token解析出的用户信息 不用额外传参" , required = true)
+    @Operation(parameters = @Parameter(name = "username", description = "token解析出的用户信息 不用额外传参",hidden = true))
+    @ApiOperationSupport(ignoreParameters = "username")
     @PostMapping("/{discussId}/add")
     public Result<String> addDiscussReply(@PathVariable Long discussId,
-                                  @RequestToken("username") Long username,
-                                  @RequestBody Reply reply){
+                                          @RequestToken("username") Long username,
+                                          @RequestBody Reply reply){
         reply.setDiscussId(discussId);
         reply.setUsername(username);
         replyService.addReply(reply);
@@ -190,4 +197,9 @@ public class ReplyController {
          boolean judgeScore = replyService.judgeScore(reply);
          return judgeScore? Result.success("评分成功"):Result.failure("评分失败");
      }
+
+     public Result<String> uploadImage(MultipartFile[] files) {
+         return null;
+     }
+
 }

@@ -41,3 +41,9 @@ fileUpload:
   avatar: avatar/
 
   url: http://127.0.0.1:8080/
+
+# 稳定增强模式
+knife4j:
+  enable: true
+  setting:
+    language: zh_cn

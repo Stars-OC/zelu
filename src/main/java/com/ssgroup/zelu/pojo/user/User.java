@@ -6,11 +6,13 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.ssgroup.zelu.utils.JwtUtil;
 import io.jsonwebtoken.Claims;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.URL;
+import org.springframework.web.bind.annotation.ModelAttribute;
 
 
 /**
@@ -18,6 +20,7 @@ import org.hibernate.validator.constraints.URL;
  */
 @Data
 @NoArgsConstructor
+@Schema(name = "User" , description = "用户类")
 @TableName("user")
 public class User {
 

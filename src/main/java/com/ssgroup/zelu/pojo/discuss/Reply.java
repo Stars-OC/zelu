@@ -25,6 +25,8 @@ public class Reply {
 
     private String content;
 
+    // 用json格式存储
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private String resources;
 
     @TableField(fill = FieldFill.INSERT_UPDATE)
