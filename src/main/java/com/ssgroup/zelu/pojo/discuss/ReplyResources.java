@@ -6,20 +6,21 @@ import lombok.Getter;
 import lombok.Setter;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
 @Setter
 public class ReplyResources {
 
-    private List<String> images;
+    private List<String> images = new ArrayList<>();
 
-    private List<String> videos;
+    private List<String> videos = new ArrayList<>();
 
-    private List<String> audios;
+    private List<String> audios = new ArrayList<>();
 
     @Nullable
-    public static String toString(ReplyResources resources) {
+    public static String toJson(ReplyResources resources) {
         ObjectMapper mapper = new ObjectMapper();
         try {
             return mapper.writeValueAsString(resources);
@@ -29,7 +30,7 @@ public class ReplyResources {
     }
 
     @Nullable
-    public static ReplyResources fromString(String str) {
+    public static ReplyResources fromJson(String str) {
         ObjectMapper mapper = new ObjectMapper();
         try {
             return mapper.readValue(str, ReplyResources.class);

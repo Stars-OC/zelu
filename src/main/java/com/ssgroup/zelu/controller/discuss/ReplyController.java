@@ -198,8 +198,4 @@ public class ReplyController {
          return judgeScore? Result.success("评分成功"):Result.failure("评分失败");
      }
 
-     public Result<String> uploadImage(MultipartFile[] files) {
-         return null;
-     }
-
 }

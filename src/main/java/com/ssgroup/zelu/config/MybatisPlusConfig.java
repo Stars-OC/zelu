@@ -3,6 +3,7 @@ package com.ssgroup.zelu.config;
 import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
 import com.baomidou.mybatisplus.extension.plugins.MybatisPlusInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.inner.PaginationInnerInterceptor;
+import com.ssgroup.zelu.pojo.discuss.ReplyResources;
 import com.ssgroup.zelu.utils.AesUtil;
 import org.apache.ibatis.reflection.MetaObject;
 import org.springframework.context.annotation.Bean;
@@ -33,8 +34,10 @@ public class MybatisPlusConfig implements MetaObjectHandler {
     @Override
     public void insertFill(MetaObject metaObject) {
         this.setFieldValByName("createAt", System.currentTimeMillis()/1000, metaObject);
-        //将密码进行填充
+        // 将密码进行填充
         this.setFieldValByName("password", AesUtil.DEFAULT_PASSWORD , metaObject);
+        // 将资源进行填充 直接存Json进数据库
+        this.setFieldValByName("resources", "{\"images\":[],\"videos\":[],\"audios\":[]}", metaObject);
     }
 
     @Override

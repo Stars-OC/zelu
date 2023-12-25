@@ -3,6 +3,7 @@ package com.ssgroup.zelu;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.ssgroup.zelu.mapper.CourseMapper;
 import com.ssgroup.zelu.mapper.UserMapper;
+import com.ssgroup.zelu.pojo.discuss.ReplyResources;
 import com.ssgroup.zelu.pojo.request.SchoolAndCourseId;
 import com.ssgroup.zelu.pojo.user.User;
 import com.ssgroup.zelu.service.UserService;
@@ -35,11 +36,12 @@ class ZeluApplicationTests {
 
 	@Test
 	void contextLoads() throws FileNotFoundException, InterruptedException {
-		SchoolAndCourseId schoolAndCourseId = new SchoolAndCourseId();
-		schoolAndCourseId.setSchoolId(100000);
-		schoolAndCourseId.setCourseId(1);
-		Integer a = courseMapper.getCourseRoleToCheck(12345, schoolAndCourseId);
-		System.out.println(a);
+		System.out.println(ReplyResources.toJson(new ReplyResources()));
+//		SchoolAndCourseId schoolAndCourseId = new SchoolAndCourseId();
+//		schoolAndCourseId.setSchoolId(100000);
+//		schoolAndCourseId.setCourseId(1);
+//		Integer a = courseMapper.getCourseRoleToCheck(12345, schoolAndCourseId);
+//		System.out.println(a);
 
 	}
 

@@ -6,11 +6,12 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.servlet.ServletComponentScan;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
+import org.thciwei.x.file.storage.spring.EnableFileStorage;
 
 @SpringBootApplication
 @ServletComponentScan
 @EnableAspectJAutoProxy
-@EnableTransactionManagement
+@EnableFileStorage
 @MapperScan("com/ssgroup/zelu/mapper")
 public class ZeluApplication {
 
