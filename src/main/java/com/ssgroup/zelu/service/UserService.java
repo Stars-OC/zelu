@@ -73,7 +73,7 @@ public class UserService {
     }
 
     /**
-     * 通过OSS上传头像
+     * @deprecated 通过OSS上传头像
      *
      * @param file          头像文件
      * @param token         JWT token
@@ -95,7 +95,7 @@ public class UserService {
     }
 
     /**
-     * 通过本地文件上传工具进行头像上传
+     * @deprecated 通过本地文件上传工具进行头像上传
      *
      * @param file 上传的头像文件
      * @param token 上传凭证
@@ -120,7 +120,7 @@ public class UserService {
     }
 
     /**
-     * 下载用户头像
+     * @deprecated 下载用户头像
      *
      * @param username 用户名
      * @return 下载的头像数据
@@ -132,7 +132,7 @@ public class UserService {
 
 
     /**
-     * 获取头像数据
+     * @deprecated 获取头像数据
      *
      * @param avatar 头像路径
      * @return 头像数据的字节数组
@@ -159,7 +159,7 @@ public class UserService {
 
 
     /**
-     * 本地上传头像
+     * @deprecated 本地上传头像
      *
      * @param multipartFile 多部分文件（包含头像文件）
      * @param username 用户名
@@ -181,6 +181,15 @@ public class UserService {
         multipartFile.transferTo(avatar);
 
         return file.getAvatarUrl(name);
+    }
+
+    /**
+     * 设置用户头像
+     * @param username 用户名
+     * @param thUrl 头像URL
+     */
+    public void setAvatar(Long username, String thUrl) {
+        userMapper.updateAvatar(username, thUrl);
     }
 
 }

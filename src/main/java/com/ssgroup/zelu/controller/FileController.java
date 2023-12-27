@@ -3,6 +3,7 @@ package com.ssgroup.zelu.controller;
 import com.ssgroup.zelu.annotation.RequestToken;
 import com.ssgroup.zelu.pojo.Result;
 import com.ssgroup.zelu.pojo.user.User;
+import com.ssgroup.zelu.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -20,6 +21,9 @@ public class FileController {
 
     @Autowired
     private FileStorageService fileStorageService;//注入实列
+
+    @Autowired
+    private UserService userService;
 
     /**
      * 上传文件
@@ -41,6 +45,34 @@ public class FileController {
 
         // 返回上传结果
         return fileInfo == null ? Result.failure("上传失败！") : Result.success("上传成功", fileInfo.getUrl());
+    }
+
+    /**
+     * 处理上传头像的请求
+     * @param file 上传的文件
+     * @param user 用户信息
+     * @return 上传结果
+     */
+    @PostMapping("/upload/avatar")
+    public Result<String> uploadAvatar(MultipartFile file,
+                                       @RequestToken User user) {
+
+        Long username = user.getUsername();
+        // 对文件进行处理和存储
+        FileInfo fileInfo = fileStorageService.of(file)
+                .setPath("avatar/") // 设置文件存储路径为"avatar/"
+                .setObjectId(username) // 设置文件对象ID为用户名
+                .setName(username + ".jpg") // 设置文件名为主机名加上".jpg"
+                .putAttr("role", user.getRole()) // 设置文件属性为用户角色
+                .image(img -> img.size(1000,1000)) // 对图片进行大小调整到 1000*1000
+                .thumbnail(th -> th.size(200,200)) // 生成一张 200*200 的缩略图
+                .upload(); // 上传文件并返回文件信息
+
+        String thUrl = fileInfo.getThUrl();
+        // 更新用户头像路径为缩略图路径
+        userService.setAvatar(username,thUrl);
+        // 返回上传结果，如果文件信息为空表示上传失败，否则返回上传成功和缩略图路径
+        return fileInfo == null ? Result.failure("上传失败！") : Result.success("上传成功", thUrl);
     }
 
 }

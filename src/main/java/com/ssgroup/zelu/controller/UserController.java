@@ -79,7 +79,7 @@ public class UserController {
 
 
     /**
-     * 上传用户头像
+     * @deprecated 上传用户头像
      *
      * @param file 上传的文件
      * @param token 请求头中的token
@@ -98,7 +98,7 @@ public class UserController {
     }
 
     /**
-     * 上传用户头像
+     * @deprecated 上传用户头像
      *
      * @param file 要上传的文件
      * @param token 请求头中的token
@@ -122,7 +122,7 @@ public class UserController {
 
 
     /**
-     * 根据用户名下载头像
+     * @deprecated 根据用户名下载头像
      *
      * @param username 用户名
      * @return 返回 ResponseEntity 类型对象
