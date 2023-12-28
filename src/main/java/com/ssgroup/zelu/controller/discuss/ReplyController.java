@@ -9,14 +9,11 @@ import com.ssgroup.zelu.pojo.Result;
 import com.ssgroup.zelu.pojo.discuss.Reply;
 import com.ssgroup.zelu.pojo.request.SchoolAndCourseId;
 import com.ssgroup.zelu.pojo.type.Role;
-import com.ssgroup.zelu.pojo.user.User;
 import com.ssgroup.zelu.service.discuss.ReplyService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -51,7 +48,7 @@ public class ReplyController {
      * @param reply     回复内容
      * @return          返回结果字符串
      */
-    //@Parameter(name = "username", description = "token解析出的用户信息 不用额外传参" , required = true)
+    @Parameter(name = "username", description = "token解析出的用户信息 不用额外传参" , required = true)
     @Operation(parameters = @Parameter(name = "username", description = "token解析出的用户信息 不用额外传参",hidden = true))
     @ApiOperationSupport(ignoreParameters = "username")
     @PostMapping("/{discussId}/add")

@@ -4,7 +4,6 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.ssgroup.zelu.mapper.CourseMapper;
 import com.ssgroup.zelu.mapper.UserMapper;
 import com.ssgroup.zelu.pojo.discuss.ReplyResources;
-import com.ssgroup.zelu.pojo.request.SchoolAndCourseId;
 import com.ssgroup.zelu.pojo.user.User;
 import com.ssgroup.zelu.service.UserService;
 import com.ssgroup.zelu.service.manager.SchoolManagerService;

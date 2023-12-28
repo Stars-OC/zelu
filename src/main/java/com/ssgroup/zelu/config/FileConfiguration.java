@@ -12,6 +12,10 @@ import org.springframework.context.annotation.Configuration;
 
 import java.io.File;
 
+/**
+ * @deprecated 文件上传配置
+ *
+ */
 @Configuration
 @Slf4j
 public class FileConfiguration {

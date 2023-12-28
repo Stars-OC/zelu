@@ -8,7 +8,6 @@ import com.ssgroup.zelu.pojo.Result;
 import com.ssgroup.zelu.pojo.discuss.Discuss;
 import com.ssgroup.zelu.pojo.request.SchoolAndCourseId;
 import com.ssgroup.zelu.pojo.type.Role;
-import com.ssgroup.zelu.pojo.user.User;
 import com.ssgroup.zelu.service.discuss.DiscussService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;

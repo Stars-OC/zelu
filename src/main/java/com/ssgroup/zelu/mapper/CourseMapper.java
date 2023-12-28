@@ -25,7 +25,6 @@ public interface CourseMapper extends BaseMapper<Course> {
      * @param username 用户名
      * @param schoolAndCourseId 封装课程和学校id
      */
-    //select username,role from course,course_user where course.course_id = course_user.course_id and course.school_id = 100000 and course_user.username = 123456;
     @Select("select role from course,course_user where course.course_id = course_user.course_id = #{schoolAndCourseId.courseId} and course_user.username = #{username} and course.school_id = #{schoolAndCourseId.schoolId}")
     Integer getCourseRoleToCheck(long username, SchoolAndCourseId schoolAndCourseId);
 

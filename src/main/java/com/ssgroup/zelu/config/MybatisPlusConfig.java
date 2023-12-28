@@ -3,7 +3,6 @@ package com.ssgroup.zelu.config;
 import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
 import com.baomidou.mybatisplus.extension.plugins.MybatisPlusInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.inner.PaginationInnerInterceptor;
-import com.ssgroup.zelu.pojo.discuss.ReplyResources;
 import com.ssgroup.zelu.utils.AesUtil;
 import org.apache.ibatis.reflection.MetaObject;
 import org.springframework.context.annotation.Bean;

@@ -59,15 +59,6 @@ public class AuthService {
     }
 
 
-    /**
-     * 根据openid查询已存在的微信用户
-     * @param openid 微信用户openid
-     * @return 如果存在该openid的微信用户，则返回该用户对象，否则返回null
-     */
-    public WechatUser findOpenid(String openid){
-        return (WechatUser) isExists("wechat","openid", openid);
-    }
-
 
     /**
      * 使用微信登录 操作sql

@@ -3,10 +3,6 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ssgroup.zelu.mapper.WechatUserMapper">
 
-<!--    <select id="findUserByOpenId" resultType="com.ssgroup.zelu.pojo.user.WechatUser">-->
-<!--        select u.username,u.nickname,u.password,u.has_avater,u.role,u.register_way,u.create_at-->
-<!--        from user u,wechat_user wu where u.username=wu.username and wu.open_id=#{openId}-->
-<!--    </select>-->
     <!--    通过openId查询用户信息-->
     <select id="getUserByOpenid" resultType="com.ssgroup.zelu.pojo.user.User">
         select u.username,u.nickname,u.password,u.avatar_url,u.role,u.register_way,u.create_at
