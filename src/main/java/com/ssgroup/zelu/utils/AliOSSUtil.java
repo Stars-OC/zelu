@@ -15,9 +15,9 @@ import java.util.List;
 
 public class AliOSSUtil {
     private static final String endpoint = "https://oss-cn-beijing.aliyuncs.com";
-    private static final String accessKeyId = "LTAI5tHoe24WD3Afrt2MmJsX";
-    private static final String accessKeySecret = "JwEsrnwaMm11hPCQdMZrcUYuOOH6S1";
-    private static final String bucketName = "socoss";
+    private static final String accessKeyId = "";
+    private static final String accessKeySecret = "";
+    private static final String bucketName = "";
 
 
     /**

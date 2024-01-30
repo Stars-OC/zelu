@@ -45,8 +45,8 @@ dromara:
 
 wechat:
   # 微信小程序
-  appID: wx3a8d6ce93105adfa
-  appSecret: 48a9418d3fda5969ebaf737fcb7fc291
+  appID:
+  appSecret:
 
 user:
   # 验证码有效时间 单位hour
